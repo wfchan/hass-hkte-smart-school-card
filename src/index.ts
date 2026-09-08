@@ -497,9 +497,31 @@ export class HkteNoticesCardEditor extends LitElement {
       font-size: 1rem;
       font-weight: 500;
     }
-    ha-textfield {
-      display: block;
+    .entity-name-field {
+      display: grid;
+      gap: 6px;
       margin-bottom: 12px;
+    }
+    .entity-name-label {
+      color: var(--secondary-text-color);
+      font-size: 0.85rem;
+      overflow-wrap: anywhere;
+    }
+    .entity-name-input {
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 40px;
+      padding: 8px 12px;
+      border: 1px solid var(--divider-color);
+      border-radius: 4px;
+      outline: 0;
+      color: var(--primary-text-color);
+      background: var(--card-background-color, var(--ha-card-background));
+      font: inherit;
+    }
+    .entity-name-input:focus-visible {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 1px var(--primary-color);
     }
   `;
   protected render() {
@@ -559,12 +581,18 @@ export class HkteNoticesCardEditor extends LitElement {
     return html`<section class="entity-names">
       <h3>Entity display names</h3>
       ${entities.map(
-        (entityId) =>
-          html`<ha-textfield
-            label=${entityId}
-            .value=${this.config.entity_names?.[entityId] ?? ""}
-            @change=${(event: Event) => this._entityNameChanged(entityId, event)}
-          ></ha-textfield>`,
+        (entityId, index) =>
+          html`<label class="entity-name-field" for=${`entity-name-${index}`}>
+            <span class="entity-name-label">${entityId}</span>
+            <input
+              id=${`entity-name-${index}`}
+              class="entity-name-input"
+              type="text"
+              .value=${this.config.entity_names?.[entityId] ?? ""}
+              @change=${(event: Event) =>
+                this._entityNameChanged(entityId, event)}
+            />
+          </label>`,
       )}
     </section>`;
   }

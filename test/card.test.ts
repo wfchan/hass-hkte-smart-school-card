@@ -170,9 +170,11 @@ describe("card", () => {
       form?.schema?.find((field) => field.name === "days")?.selector,
     ).toEqual({ number: { min: 0, max: 30, mode: "box" } });
     const nameField = editor.shadowRoot?.querySelector(
-      "ha-textfield",
+      ".entity-name-input",
     ) as HTMLInputElement | null;
-    expect(nameField?.getAttribute("label")).toBe("sensor.student");
+    expect(
+      editor.shadowRoot?.querySelector(".entity-name-label")?.textContent,
+    ).toBe("sensor.student");
 
     let detail: unknown;
     editor.addEventListener("config-changed", (event) => {
