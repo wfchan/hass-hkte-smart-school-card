@@ -97,6 +97,18 @@ describe("card", () => {
     expect(
       card.shadowRoot?.querySelector(".student-title")?.textContent?.trim(),
     ).toBe("Hayhay");
+
+    const withoutStudentName = new HkteNoticesCard();
+    withoutStudentName.setConfig({
+      type: "custom:hkte-notices-card",
+      show_student_name: false,
+    });
+    withoutStudentName.hass = card.hass;
+    document.body.append(withoutStudentName);
+    await withoutStudentName.updateComplete;
+    expect(
+      withoutStudentName.shadowRoot?.querySelector(".student-title"),
+    ).toBeNull();
   });
 
   it("applies the configured filter without rendering filter controls", async () => {
@@ -169,6 +181,10 @@ describe("card", () => {
     expect(
       form?.schema?.find((field) => field.name === "days")?.selector,
     ).toEqual({ number: { min: 0, max: 30, mode: "box" } });
+    expect(
+      form?.schema?.find((field) => field.name === "show_student_name")
+        ?.selector,
+    ).toEqual({ boolean: {} });
     const nameField = editor.shadowRoot?.querySelector(
       ".entity-name-input",
     ) as HTMLInputElement | null;

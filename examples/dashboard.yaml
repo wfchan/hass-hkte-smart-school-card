@@ -3,4 +3,5 @@ title: HKTE 通告
 filter: all
 limit: 20
 initially_expanded: latest
+show_student_name: true
 show_attachments: true

@@ -10,6 +10,7 @@ export interface HkteNoticesCardConfig {
   limit?: number;
   days?: number;
   initially_expanded?: ExpandedMode;
+  show_student_name?: boolean;
   show_attachments?: boolean;
 }
 

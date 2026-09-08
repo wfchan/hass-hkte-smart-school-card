@@ -340,6 +340,7 @@ export class HkteNoticesCard extends LitElement {
       limit: 20,
       days: 0,
       initially_expanded: "latest",
+      show_student_name: true,
       show_attachments: true,
     };
   }
@@ -363,6 +364,7 @@ export class HkteNoticesCard extends LitElement {
       limit: clampLimit(config.limit),
       days: clampDays(config.days),
       initially_expanded: expanded,
+      show_student_name: config.show_student_name !== false,
       show_attachments: config.show_attachments !== false,
     };
   }
@@ -436,6 +438,7 @@ export class HkteNoticesCard extends LitElement {
     const limit = this.config?.limit ?? 20;
     const days = this.config?.days ?? 0;
     const filter = this.config?.filter ?? "all";
+    const showStudentName = this.config?.show_student_name !== false;
     const total = feeds.reduce(
       (sum, feed) => sum + visibleNotices(feed, filter, limit, days).length,
       0,
@@ -456,12 +459,16 @@ export class HkteNoticesCard extends LitElement {
                   const unavailable =
                     feed.state === "unavailable" || feed.state === "unknown";
                   return html`<section class="student">
-                    <h2 class="student-title">
-                      ${
-                        this.config?.entity_names?.[feed.entityId] ??
-                        studentName(feed.name, feed.entityId)
-                      }
-                    </h2>
+                    ${
+                      showStudentName
+                        ? html`<h2 class="student-title">
+                            ${
+                              this.config?.entity_names?.[feed.entityId] ??
+                              studentName(feed.name, feed.entityId)
+                            }
+                          </h2>`
+                        : nothing
+                    }
                     ${unavailable ? html`<div class="hint error">${text.unavailable}</div>` : notices.length ? notices.map((item, index) => this._notice(item, index, mode)) : html`<div class="empty">${text.noNotices}</div>`}${feed.hasMore && notices.length ? html`<div class="hint">${text.more}</div>` : nothing}
                   </section>`;
                 })
@@ -569,6 +576,7 @@ export class HkteNoticesCardEditor extends LitElement {
               },
             },
           },
+          { name: "show_student_name", selector: { boolean: {} } },
           { name: "show_attachments", selector: { boolean: {} } },
         ]}
         @value-changed=${this._valueChanged}
