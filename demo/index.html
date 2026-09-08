@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HKTE Notices Card Preview</title>
+    <style>
+      :root {
+        --primary-text-color: #202124;
+        --secondary-text-color: #697078;
+        --primary-color: #087f5b;
+        --divider-color: #dfe3e6;
+        --secondary-background-color: #f4f6f7;
+        --warning-color: #e9a400;
+        --error-color: #b3261e;
+      }
+      body {
+        margin: 0;
+        padding: 28px;
+        background: #edf1f2;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      hkte-notices-card {
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      ha-card {
+        display: block;
+        background: white;
+        border: 1px solid #d9dfe2;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(23, 33, 38, 0.08);
+      }
+      @media (max-width: 480px) {
+        body {
+          padding: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <hkte-notices-card id="card"></hkte-notices-card>
+    <script type="module">
+      import "/src/index.ts";
+      const longTitle =
+        "學校旅行與戶外學習日重要安排及家長須知 Very long notice title for responsive testing";
+      const card = document.querySelector("#card");
+      card.setConfig({
+        type: "custom:hkte-notices-card",
+        title: "HKTE 通告",
+        filter: "all",
+        limit: 20,
+        initially_expanded: "latest",
+        show_attachments: true,
+      });
+      card.hass = {
+        locale: { language: "zh-Hant" },
+        states: {
+          "sensor.chan_tai_man_notice_content": {
+            state: "2",
+            attributes: {
+              friendly_name: "陳大文 通告內容",
+              has_more: false,
+              notices: [
+                {
+                  id: "n2",
+                  title: longTitle,
+                  content:
+                    "請家長細閱以下安排：\n\n學生須於上午八時正回校，並穿著整齊運動服。正文只會以純文字顯示。",
+                  issued_at: "2026-09-08T08:30:00+08:00",
+                  deadline: "2026-09-12T23:59:00+08:00",
+                  unread: true,
+                  replied: false,
+                  content_truncated: false,
+                  attachments: [
+                    {
+                      filename: "學校旅行家長通告及回條-超長檔案名稱測試.pdf",
+                      mime_type: "application/pdf",
+                      size: 245760,
+                    },
+                  ],
+                },
+                {
+                  id: "n1",
+                  title: "九月份午膳安排",
+                  content: "本月餐單已隨通告附上。",
+                  issued_at: "2026-09-05T12:00:00+08:00",
+                  deadline: null,
+                  unread: false,
+                  replied: true,
+                  content_truncated: false,
+                  attachments: [],
+                },
+              ],
+            },
+          },
+        },
+      };
+    </script>
+  </body>
+</html>

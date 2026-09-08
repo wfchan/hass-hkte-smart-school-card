@@ -1,0 +1,24 @@
+{
+  "name": "hass-hkte-smart-school-card",
+  "version": "0.1.0",
+  "description": "A read-only Lovelace card for HKTE Smart School notices",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "lint": "prettier --check src test demo examples README.md hacs.json package.json tsconfig.json vite.config.ts .github"
+  },
+  "dependencies": {
+    "lit": "^3.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.9.6",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.5",
+    "vitest": "^3.1.2"
+  }
+}
