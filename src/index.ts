@@ -293,11 +293,21 @@ export class HkteNoticesCard extends LitElement {
   setConfig(config: HkteNoticesCardConfig): void {
     if (!config || config.type !== "custom:hkte-notices-card")
       throw new Error("Invalid HKTE notices card configuration");
+    const expanded = ["latest", "none", "all"].includes(
+      config.initially_expanded ?? "latest",
+    )
+      ? (config.initially_expanded ?? "latest")
+      : "latest";
     this.config = {
       ...config,
+      entities: Array.isArray(config.entities)
+        ? config.entities.filter(
+            (entity): entity is string => typeof entity === "string",
+          )
+        : undefined,
       filter: config.filter === "unread" ? "unread" : "all",
       limit: clampLimit(config.limit),
-      initially_expanded: config.initially_expanded ?? "latest",
+      initially_expanded: expanded,
       show_attachments: config.show_attachments !== false,
     };
     this._filter = this.config.filter ?? "all";
@@ -396,6 +406,9 @@ export class HkteNoticesCardEditor extends LitElement {
   constructor() {
     super();
     this.config = { type: "custom:hkte-notices-card" };
+  }
+  setConfig(config: HkteNoticesCardConfig): void {
+    this.config = config;
   }
   static styles = css`
     :host {

@@ -700,11 +700,17 @@ class F extends x {
   setConfig(t) {
     if (!t || t.type !== "custom:hkte-notices-card")
       throw new Error("Invalid HKTE notices card configuration");
+    const e = ["latest", "none", "all"].includes(
+      t.initially_expanded ?? "latest"
+    ) ? t.initially_expanded ?? "latest" : "latest";
     this.config = {
       ...t,
+      entities: Array.isArray(t.entities) ? t.entities.filter(
+        (s) => typeof s == "string"
+      ) : void 0,
       filter: t.filter === "unread" ? "unread" : "all",
       limit: qt(t.limit),
-      initially_expanded: t.initially_expanded ?? "latest",
+      initially_expanded: e,
       show_attachments: t.show_attachments !== !1
     }, this._filter = this.config.filter ?? "all";
   }
@@ -968,6 +974,9 @@ C(F, "properties", {
 class q extends x {
   constructor() {
     super(), this.config = { type: "custom:hkte-notices-card" };
+  }
+  setConfig(t) {
+    this.config = t;
   }
   render() {
     return u`<ha-form
