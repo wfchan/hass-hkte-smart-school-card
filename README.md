@@ -31,6 +31,8 @@ show_attachments: true
 
 The card only reads Home Assistant entity state. It does not call HKTE, mark notices as read, send replies, or download attachment files. Attachments are shown as filename, MIME type and size metadata only. Notice bodies are rendered as plain text and embedded links or media are never loaded.
 
+Read notices use a green check icon and `已讀` badge, while unread notices retain the orange `未讀` badge for quick visual distinction.
+
 ## Configuration
 
 `entities` is optional and accepts one or more `notice_content` sensor entity IDs. `filter` is `all` or `unread`; `limit` is 1-20; `initially_expanded` is `latest`, `none` or `all`; and `show_attachments` controls metadata rows.

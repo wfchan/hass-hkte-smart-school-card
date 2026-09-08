@@ -43,6 +43,33 @@ describe("card", () => {
     expect(card.shadowRoot?.textContent).toContain("notice.pdf");
   });
 
+  it("marks read notices with a green check status", async () => {
+    const card = new HkteNoticesCard();
+    card.setConfig({ type: "custom:hkte-notices-card" });
+    card.hass = {
+      states: {
+        "sensor.student": {
+          state: "1",
+          attributes: {
+            notices: [
+              {
+                id: "read-1",
+                title: "Read notice",
+                content: "Already reviewed",
+                unread: false,
+              },
+            ],
+          },
+        },
+      },
+    };
+    document.body.append(card);
+    await card.updateComplete;
+    const badge = card.shadowRoot?.querySelector(".read-status");
+    expect(badge?.textContent).toContain("Read");
+    expect(badge?.querySelector(".status-icon")?.textContent).toBe("✓");
+  });
+
   it("filters notices through the visible controls", async () => {
     const card = new HkteNoticesCard();
     card.setConfig({ type: "custom:hkte-notices-card" });

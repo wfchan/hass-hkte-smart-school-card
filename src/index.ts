@@ -14,6 +14,7 @@ const LABELS = {
   zh: {
     all: "全部",
     unread: "未讀",
+    read: "已讀",
     issued: "發出",
     deadline: "截止",
     replied: "已回覆",
@@ -30,6 +31,7 @@ const LABELS = {
   en: {
     all: "All",
     unread: "Unread",
+    read: "Read",
     issued: "Issued",
     deadline: "Deadline",
     replied: "Replied",
@@ -197,6 +199,33 @@ export class HkteNoticesCard extends LitElement {
       font-size: 0.72rem;
       font-weight: 650;
     }
+    .read-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      flex: none;
+      border: 1px solid var(--success-color, #2e9d68);
+      border-radius: 4px;
+      padding: 2px 6px;
+      color: var(--success-color, #2e9d68);
+      background: color-mix(
+        in srgb,
+        var(--success-color, #2e9d68) 12%,
+        transparent
+      );
+      font-size: 0.72rem;
+      font-weight: 650;
+    }
+    .status-icon {
+      display: inline-grid;
+      width: 0.95em;
+      height: 0.95em;
+      place-items: center;
+      border: 1px solid currentColor;
+      border-radius: 50%;
+      font-size: 0.78em;
+      line-height: 1;
+    }
     .body {
       padding: 0 0 14px 20px;
       white-space: pre-wrap;
@@ -327,8 +356,16 @@ export class HkteNoticesCard extends LitElement {
     const expanded = mode === "all" || (mode === "latest" && index === 0);
     return html`<details ?open=${expanded}>
       <summary>
-        <span class="title">${notice.title}</span
-        >${notice.unread === true ? html`<span class="unread">${text.unread}</span>` : nothing}
+        <span class="title">${notice.title}</span>${
+          notice.unread === true
+            ? html`<span class="unread">${text.unread}</span>`
+            : notice.unread === false
+              ? html`<span class="read-status" aria-label=${text.read}
+                  ><span class="status-icon" aria-hidden="true">✓</span
+                  >${text.read}</span
+                >`
+              : nothing
+        }
       </summary>
       <div class="meta">
         <span>${text.issued}: ${formatDate(notice.issued_at, this.hass)}</span
