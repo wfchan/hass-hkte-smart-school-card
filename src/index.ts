@@ -164,7 +164,7 @@ export class HkteNoticesCard extends LitElement {
     }
     summary {
       display: flex;
-      align-items: baseline;
+      align-items: flex-start;
       gap: 8px;
       min-width: 0;
       padding: 13px 0;
@@ -186,12 +186,27 @@ export class HkteNoticesCard extends LitElement {
       transform: rotate(90deg);
     }
     .title {
+      display: block;
       min-width: 0;
       overflow-wrap: anywhere;
       font-weight: 550;
     }
+    .title-content {
+      display: block;
+      flex: 1 1 auto;
+      min-width: 0;
+    }
+    .issued-title {
+      display: block;
+      margin-top: 4px;
+      color: var(--secondary-text-color);
+      font-size: 0.78rem;
+      font-weight: 400;
+      line-height: 1.35;
+    }
     .unread {
       flex: none;
+      margin-left: auto;
       border-radius: 4px;
       padding: 2px 6px;
       color: var(--text-primary-color, var(--primary-text-color));
@@ -356,7 +371,12 @@ export class HkteNoticesCard extends LitElement {
     const expanded = mode === "all" || (mode === "latest" && index === 0);
     return html`<details ?open=${expanded}>
       <summary>
-        <span class="title">${notice.title}</span>${
+        <span class="title-content">
+          <span class="title">${notice.title}</span>
+          <span class="issued-title"
+            >${text.issued}: ${formatDate(notice.issued_at, this.hass)}</span
+          > </span
+        >${
           notice.unread === true
             ? html`<span class="unread">${text.unread}</span>`
             : notice.unread === false
@@ -368,8 +388,7 @@ export class HkteNoticesCard extends LitElement {
         }
       </summary>
       <div class="meta">
-        <span>${text.issued}: ${formatDate(notice.issued_at, this.hass)}</span
-        ><span>${text.deadline}: ${formatDate(notice.deadline, this.hass)}</span
+        <span>${text.deadline}: ${formatDate(notice.deadline, this.hass)}</span
         >${notice.replied === true ? html`<span class="status">${text.replied}</span>` : notice.replied === false ? html`<span>${text.noReply}</span>` : nothing}
       </div>
       <div class="body">${notice.content || text.noBody}</div>

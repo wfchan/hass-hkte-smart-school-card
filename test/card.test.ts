@@ -56,6 +56,7 @@ describe("card", () => {
                 id: "read-1",
                 title: "Read notice",
                 content: "Already reviewed",
+                issued_at: "2026-09-04T09:30:00+08:00",
                 unread: false,
               },
             ],
@@ -68,6 +69,15 @@ describe("card", () => {
     const badge = card.shadowRoot?.querySelector(".read-status");
     expect(badge?.textContent).toContain("Read");
     expect(badge?.querySelector(".status-icon")?.textContent).toBe("✓");
+    expect(
+      card.shadowRoot?.querySelector(".issued-title")?.textContent,
+    ).toContain("Issued");
+    expect(
+      card.shadowRoot?.querySelector(".issued-title")?.textContent,
+    ).toContain("2026");
+    expect(card.shadowRoot?.querySelector(".meta")?.textContent).not.toContain(
+      "Issued",
+    );
   });
 
   it("filters notices through the visible controls", async () => {
