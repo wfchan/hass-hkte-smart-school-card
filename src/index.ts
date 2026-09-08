@@ -387,7 +387,7 @@ export class HkteNoticesCard extends LitElement {
         <span class="title-content">
           <span class="title">${notice.title}</span>
           <span class="issued-title"
-            >${text.issued}: ${formatDate(notice.issued_at, this.hass)}</span
+            >${formatDate(notice.issued_at, this.hass)}</span
           > </span
         ><span class="status-icons">
           ${
@@ -420,8 +420,7 @@ export class HkteNoticesCard extends LitElement {
         </span>
       </summary>
       <div class="meta">
-        <span>${text.deadline}: ${formatDate(notice.deadline, this.hass)}</span
-        >${notice.replied === true ? html`<span class="status">${text.replied}</span>` : notice.replied === false ? html`<span>${text.noReply}</span>` : nothing}
+        <span>${text.deadline}: ${formatDate(notice.deadline, this.hass)}</span>
       </div>
       <div class="body">${notice.content || text.noBody}</div>
       ${notice.content_truncated ? html`<div class="hint">${text.truncated}</div>` : nothing}${
@@ -536,8 +535,8 @@ export class HkteNoticesCardEditor extends LitElement {
             select: {
               options: [
                 { value: "latest", label: "Latest" },
-                { value: "none", label: "None" },
-                { value: "all", label: "All" },
+                { value: "none", label: "Collapse latest" },
+                { value: "all", label: "Expand all" },
               ],
             },
           },

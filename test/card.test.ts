@@ -76,12 +76,15 @@ describe("card", () => {
     expect(badge?.textContent?.trim()).toBe("");
     expect(
       card.shadowRoot?.querySelector(".issued-title")?.textContent,
-    ).toContain("Issued");
+    ).toContain("2026");
     expect(
       card.shadowRoot?.querySelector(".issued-title")?.textContent,
-    ).toContain("2026");
+    ).not.toContain("Issued");
     expect(card.shadowRoot?.querySelector(".meta")?.textContent).not.toContain(
       "Issued",
+    );
+    expect(card.shadowRoot?.querySelector(".meta")?.textContent).not.toContain(
+      "Replied",
     );
   });
 
