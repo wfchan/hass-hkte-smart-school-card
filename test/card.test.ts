@@ -50,7 +50,10 @@ describe("card", () => {
 
   it("marks read notices with a green check status", async () => {
     const card = new HkteNoticesCard();
-    card.setConfig({ type: "custom:hkte-notices-card" });
+    card.setConfig({
+      type: "custom:hkte-notices-card",
+      entity_names: { "sensor.student": "Hayhay" },
+    });
     card.hass = {
       states: {
         "sensor.student": {
@@ -91,11 +94,14 @@ describe("card", () => {
     expect(card.shadowRoot?.querySelector(".meta")?.textContent).not.toContain(
       "Replied",
     );
+    expect(
+      card.shadowRoot?.querySelector(".student-title")?.textContent?.trim(),
+    ).toBe("Hayhay");
   });
 
-  it("filters notices through the visible controls", async () => {
+  it("applies the configured filter without rendering filter controls", async () => {
     const card = new HkteNoticesCard();
-    card.setConfig({ type: "custom:hkte-notices-card" });
+    card.setConfig({ type: "custom:hkte-notices-card", filter: "unread" });
     card.hass = {
       states: {
         "sensor.student": {
@@ -111,12 +117,10 @@ describe("card", () => {
     };
     document.body.append(card);
     await card.updateComplete;
-    const buttons = card.shadowRoot?.querySelectorAll("button");
-    (buttons?.[1] as HTMLButtonElement).click();
-    await card.updateComplete;
     expect(card.shadowRoot?.textContent).toContain("Unread notice");
     expect(card.shadowRoot?.textContent).not.toContain("Archived notice");
     expect(card.shadowRoot?.querySelector(".count")?.textContent).toBe("1");
+    expect(card.shadowRoot?.querySelectorAll("button")).toHaveLength(0);
   });
 
   it("renders unavailable and missing-feed states", async () => {
@@ -149,6 +153,7 @@ describe("card", () => {
     editor.setConfig({
       type: "custom:hkte-notices-card",
       title: "School",
+      entities: ["sensor.student"],
     });
     document.body.append(editor);
     await editor.updateComplete;
@@ -164,6 +169,10 @@ describe("card", () => {
     expect(
       form?.schema?.find((field) => field.name === "days")?.selector,
     ).toEqual({ number: { min: 0, max: 30, mode: "box" } });
+    const nameField = editor.shadowRoot?.querySelector(
+      "ha-textfield",
+    ) as HTMLInputElement | null;
+    expect(nameField?.getAttribute("label")).toBe("sensor.student");
 
     let detail: unknown;
     editor.addEventListener("config-changed", (event) => {
@@ -180,8 +189,21 @@ describe("card", () => {
       config: {
         type: "custom:hkte-notices-card",
         title: "School",
+        entities: ["sensor.student"],
         filter: "unread",
         days: 30,
+      },
+    });
+    nameField!.value = "Hayhay";
+    nameField!.dispatchEvent(
+      new Event("change", { bubbles: true, composed: true }),
+    );
+    expect(detail).toEqual({
+      config: {
+        type: "custom:hkte-notices-card",
+        title: "School",
+        entities: ["sensor.student"],
+        entity_names: { "sensor.student": "Hayhay" },
       },
     });
   });

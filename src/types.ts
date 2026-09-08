@@ -4,6 +4,7 @@ export type ExpandedMode = "latest" | "none" | "all";
 export interface HkteNoticesCardConfig {
   type: "custom:hkte-notices-card";
   entities?: string[];
+  entity_names?: Record<string, string>;
   title?: string;
   filter?: NoticeFilter;
   limit?: number;

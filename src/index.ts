@@ -1,12 +1,10 @@
 import { LitElement, css, html, nothing } from "lit";
-import type { PropertyValues } from "lit";
 import { clampDays, clampLimit, discoverFeeds, visibleNotices } from "./data";
 import type {
   ExpandedMode,
   HkteNoticesCardConfig,
   HomeAssistant,
   Notice,
-  NoticeFilter,
   NoticeFeed,
 } from "./types";
 
@@ -61,6 +59,17 @@ function studentName(name: string, entityId: string): string {
     name.replace(/\s+(?:Notice content|通告內容)$/i, "").trim() || entityId
   );
 }
+function entityNames(value: unknown): Record<string, string> | undefined {
+  if (!value || typeof value !== "object" || Array.isArray(value))
+    return undefined;
+  const names = Object.entries(value as Record<string, unknown>).reduce<
+    Record<string, string>
+  >((result, [entityId, name]) => {
+    if (typeof name === "string" && name.trim()) result[entityId] = name.trim();
+    return result;
+  }, {});
+  return Object.keys(names).length ? names : undefined;
+}
 function formatDate(value: string | null, hass?: HomeAssistant): string {
   const text = labels(hass);
   if (!value) return text.noDate;
@@ -100,7 +109,6 @@ export class HkteNoticesCard extends LitElement {
   static properties = {
     hass: { attribute: false },
     config: { attribute: false },
-    _filter: { state: true },
   };
   static styles = css`
     :host {
@@ -115,7 +123,8 @@ export class HkteNoticesCard extends LitElement {
       align-items: baseline;
       justify-content: space-between;
       gap: 12px;
-      padding: 18px 20px 12px;
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid var(--divider-color);
     }
     h1 {
       margin: 0;
@@ -127,33 +136,6 @@ export class HkteNoticesCard extends LitElement {
       color: var(--secondary-text-color);
       font-size: 0.85rem;
       white-space: nowrap;
-    }
-    .toolbar {
-      display: flex;
-      gap: 6px;
-      padding: 0 20px 14px;
-      border-bottom: 1px solid var(--divider-color);
-    }
-    button {
-      border: 1px solid var(--divider-color);
-      border-radius: 6px;
-      padding: 6px 12px;
-      background: transparent;
-      color: var(--primary-text-color);
-      font: inherit;
-      cursor: pointer;
-    }
-    button:hover {
-      background: var(--secondary-background-color);
-    }
-    button:focus-visible {
-      outline: 2px solid var(--primary-color);
-      outline-offset: 2px;
-    }
-    button[aria-pressed="true"] {
-      border-color: var(--primary-color);
-      color: var(--primary-color);
-      background: color-mix(in srgb, var(--primary-color) 10%, transparent);
     }
     .content {
       padding: 4px 20px 18px;
@@ -302,7 +284,6 @@ export class HkteNoticesCard extends LitElement {
     }
     @media (max-width: 480px) {
       .header,
-      .toolbar,
       .content {
         padding-left: 14px;
         padding-right: 14px;
@@ -311,9 +292,6 @@ export class HkteNoticesCard extends LitElement {
         align-items: flex-start;
         flex-direction: column;
         gap: 3px;
-      }
-      button {
-        flex: 1;
       }
     }
     @media (prefers-reduced-motion: no-preference) {
@@ -351,11 +329,6 @@ export class HkteNoticesCard extends LitElement {
   `;
   declare hass?: HomeAssistant;
   declare config?: HkteNoticesCardConfig;
-  declare private _filter: NoticeFilter;
-  constructor() {
-    super();
-    this._filter = "all";
-  }
   static async getConfigElement(): Promise<HTMLElement> {
     return document.createElement("hkte-notices-card-editor");
   }
@@ -385,20 +358,16 @@ export class HkteNoticesCard extends LitElement {
             (entity): entity is string => typeof entity === "string",
           )
         : undefined,
+      entity_names: entityNames(config.entity_names),
       filter: config.filter === "unread" ? "unread" : "all",
       limit: clampLimit(config.limit),
       days: clampDays(config.days),
       initially_expanded: expanded,
       show_attachments: config.show_attachments !== false,
     };
-    this._filter = this.config.filter ?? "all";
   }
   getCardSize(): number {
     return 4;
-  }
-  protected updated(changed: PropertyValues<this>): void {
-    if (changed.has("config") && this.config?.filter)
-      this._filter = this.config.filter;
   }
   private _feeds(): NoticeFeed[] {
     return discoverFeeds(this.hass ?? { states: {} }, this.config?.entities);
@@ -466,28 +435,15 @@ export class HkteNoticesCard extends LitElement {
     const mode = this.config?.initially_expanded ?? "latest";
     const limit = this.config?.limit ?? 20;
     const days = this.config?.days ?? 0;
+    const filter = this.config?.filter ?? "all";
     const total = feeds.reduce(
-      (sum, feed) =>
-        sum + visibleNotices(feed, this._filter, limit, days).length,
+      (sum, feed) => sum + visibleNotices(feed, filter, limit, days).length,
       0,
     );
     return html`<ha-card
       ><div class="header">
         <h1>${this.config?.title ?? "HKTE Notices"}</h1>
         <span class="count">${total}</span>
-      </div>
-      <div class="toolbar" role="group" aria-label="Notice filter">
-        <button
-          aria-pressed=${this._filter === "all"}
-          @click=${() => (this._filter = "all")}
-        >
-          ${text.all}</button
-        ><button
-          aria-pressed=${this._filter === "unread"}
-          @click=${() => (this._filter = "unread")}
-        >
-          ${text.unread}
-        </button>
       </div>
       <div class="content">
         ${
@@ -496,17 +452,15 @@ export class HkteNoticesCard extends LitElement {
             : feeds.length === 0
               ? html`<div class="empty">${text.noEntities}</div>`
               : feeds.map((feed) => {
-                  const notices = visibleNotices(
-                    feed,
-                    this._filter,
-                    limit,
-                    days,
-                  );
+                  const notices = visibleNotices(feed, filter, limit, days);
                   const unavailable =
                     feed.state === "unavailable" || feed.state === "unknown";
                   return html`<section class="student">
                     <h2 class="student-title">
-                      ${studentName(feed.name, feed.entityId)}
+                      ${
+                        this.config?.entity_names?.[feed.entityId] ??
+                        studentName(feed.name, feed.entityId)
+                      }
                     </h2>
                     ${unavailable ? html`<div class="hint error">${text.unavailable}</div>` : notices.length ? notices.map((item, index) => this._notice(item, index, mode)) : html`<div class="empty">${text.noNotices}</div>`}${feed.hasMore && notices.length ? html`<div class="hint">${text.more}</div>` : nothing}
                   </section>`;
@@ -535,56 +489,84 @@ export class HkteNoticesCardEditor extends LitElement {
     :host {
       display: block;
     }
+    .entity-names {
+      margin-top: 20px;
+    }
+    .entity-names h3 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    ha-textfield {
+      display: block;
+      margin-bottom: 12px;
+    }
   `;
   protected render() {
     return html`<ha-form
-      .hass=${this.hass}
-      .data=${this.config}
-      .schema=${[
-        { name: "title", selector: { text: {} } },
-        {
-          name: "entities",
-          selector: {
-            entity: { multiple: true, filter: { domain: "sensor" } },
-          },
-        },
-        {
-          name: "filter",
-          selector: {
-            select: {
-              options: [
-                { value: "all", label: "All" },
-                { value: "unread", label: "Unread" },
-              ],
+        .hass=${this.hass}
+        .data=${this.config}
+        .schema=${[
+          { name: "title", selector: { text: {} } },
+          {
+            name: "entities",
+            selector: {
+              entity: { multiple: true, filter: { domain: "sensor" } },
             },
           },
-        },
-        {
-          name: "limit",
-          selector: { number: { min: 1, max: 20, mode: "slider" } },
-        },
-        {
-          name: "days",
-          selector: {
-            number: { min: 0, max: 30, mode: "box" },
-          },
-        },
-        {
-          name: "initially_expanded",
-          selector: {
-            select: {
-              options: [
-                { value: "latest", label: "Latest" },
-                { value: "none", label: "Collapse latest" },
-                { value: "all", label: "Expand all" },
-              ],
+          {
+            name: "filter",
+            selector: {
+              select: {
+                options: [
+                  { value: "all", label: "All" },
+                  { value: "unread", label: "Unread" },
+                ],
+              },
             },
           },
-        },
-        { name: "show_attachments", selector: { boolean: {} } },
-      ]}
-      @value-changed=${this._valueChanged}
-    ></ha-form>`;
+          {
+            name: "limit",
+            selector: { number: { min: 1, max: 20, mode: "slider" } },
+          },
+          {
+            name: "days",
+            selector: {
+              number: { min: 0, max: 30, mode: "box" },
+            },
+          },
+          {
+            name: "initially_expanded",
+            selector: {
+              select: {
+                options: [
+                  { value: "latest", label: "Latest" },
+                  { value: "none", label: "Collapse latest" },
+                  { value: "all", label: "Expand all" },
+                ],
+              },
+            },
+          },
+          { name: "show_attachments", selector: { boolean: {} } },
+        ]}
+        @value-changed=${this._valueChanged}
+      ></ha-form
+      >${this._entityNameFields()}`;
+  }
+  private _entityNameFields() {
+    const entities = this.config.entities ?? [];
+    if (entities.length === 0) return nothing;
+    return html`<section class="entity-names">
+      <h3>Entity display names</h3>
+      ${entities.map(
+        (entityId) =>
+          html`<ha-textfield
+            label=${entityId}
+            .value=${this.config.entity_names?.[entityId] ?? ""}
+            @change=${(event: Event) => this._entityNameChanged(entityId, event)}
+          ></ha-textfield>`,
+      )}
+    </section>`;
   }
   private _valueChanged(
     event: CustomEvent<{ value: Partial<HkteNoticesCardConfig> }>,
@@ -595,6 +577,24 @@ export class HkteNoticesCardEditor extends LitElement {
         bubbles: true,
         composed: true,
         detail: { config: { ...this.config, ...event.detail.value } },
+      }),
+    );
+  }
+  private _entityNameChanged(entityId: string, event: Event): void {
+    const value = (event.target as HTMLInputElement).value.trim();
+    const names = { ...(this.config.entity_names ?? {}) };
+    if (value) names[entityId] = value;
+    else delete names[entityId];
+    this.dispatchEvent(
+      new CustomEvent("config-changed", {
+        bubbles: true,
+        composed: true,
+        detail: {
+          config: {
+            ...this.config,
+            entity_names: Object.keys(names).length ? names : undefined,
+          },
+        },
       }),
     );
   }
