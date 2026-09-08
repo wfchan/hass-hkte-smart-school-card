@@ -7,6 +7,7 @@ import type {
 } from "./types";
 
 const MAX_NOTICES = 20;
+const DEFAULT_NOTICE_LIMIT = 5;
 const MAX_DAYS = 30;
 
 function text(value: unknown, fallback = ""): string {
@@ -123,7 +124,9 @@ export function visibleNotices(
 
 export function clampLimit(limit: unknown): number {
   const value =
-    typeof limit === "number" && Number.isFinite(limit) ? limit : MAX_NOTICES;
+    typeof limit === "number" && Number.isFinite(limit)
+      ? limit
+      : DEFAULT_NOTICE_LIMIT;
   return Math.min(MAX_NOTICES, Math.max(1, Math.round(value)));
 }
 

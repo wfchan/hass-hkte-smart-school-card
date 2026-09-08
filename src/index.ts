@@ -337,7 +337,7 @@ export class HkteNoticesCard extends LitElement {
       type: "custom:hkte-notices-card",
       title: "HKTE Notices",
       filter: "all",
-      limit: 20,
+      limit: 5,
       days: 0,
       initially_expanded: "latest",
       show_student_name: true,
@@ -435,7 +435,7 @@ export class HkteNoticesCard extends LitElement {
     const text = labels(this.hass);
     const feeds = this._feeds();
     const mode = this.config?.initially_expanded ?? "latest";
-    const limit = this.config?.limit ?? 20;
+    const limit = this.config?.limit ?? 5;
     const days = this.config?.days ?? 0;
     const filter = this.config?.filter ?? "all";
     const showStudentName = this.config?.show_student_name !== false;

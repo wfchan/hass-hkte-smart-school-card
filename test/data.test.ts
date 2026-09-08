@@ -61,7 +61,7 @@ describe("notice data", () => {
     expect(discoverFeeds(hass, ["sensor.two"])[0].entityId).toBe("sensor.two");
     expect(clampLimit(0)).toBe(1);
     expect(clampLimit(99)).toBe(20);
-    expect(clampLimit("bad")).toBe(20);
+    expect(clampLimit("bad")).toBe(5);
     expect(clampDays(-1)).toBe(0);
     expect(clampDays(31)).toBe(30);
     expect(clampDays("bad")).toBe(0);

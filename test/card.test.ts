@@ -2,6 +2,12 @@ import { describe, expect, it } from "vitest";
 import { HkteNoticesCard, HkteNoticesCardEditor } from "../src/index";
 
 describe("card", () => {
+  it("defaults the configured notice limit to five", () => {
+    const card = new HkteNoticesCard();
+    card.setConfig({ type: "custom:hkte-notices-card" });
+    expect(card.config?.limit).toBe(5);
+  });
+
   it("renders provider content as text and never creates links", async () => {
     const card = new HkteNoticesCard();
     card.setConfig({
