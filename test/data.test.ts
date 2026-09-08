@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   clampLimit,
+  clampDays,
   discoverFeeds,
   normalizeFeed,
   visibleNotices,
@@ -61,5 +62,32 @@ describe("notice data", () => {
     expect(clampLimit(0)).toBe(1);
     expect(clampLimit(99)).toBe(20);
     expect(clampLimit("bad")).toBe(20);
+    expect(clampDays(-1)).toBe(0);
+    expect(clampDays(400)).toBe(365);
+    expect(clampDays("bad")).toBe(0);
+  });
+
+  it("limits notices by issued date without dropping missing dates", () => {
+    const feed = normalizeFeed(
+      "sensor.student",
+      state([
+        { id: "recent", title: "Recent", issued_at: "2026-09-08T00:00:00Z" },
+        { id: "old", title: "Old", issued_at: "2026-08-01T00:00:00Z" },
+        { id: "unknown", title: "Unknown" },
+      ]),
+    );
+    expect(
+      visibleNotices(feed!, "all", 20, 7, Date.parse("2026-09-08T12:00:00Z")),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: "recent" }),
+        expect.objectContaining({ id: "unknown" }),
+      ]),
+    );
+    expect(
+      visibleNotices(feed!, "all", 20, 7, Date.parse("2026-09-08T12:00:00Z")),
+    ).not.toEqual(
+      expect.arrayContaining([expect.objectContaining({ id: "old" })]),
+    );
   });
 });

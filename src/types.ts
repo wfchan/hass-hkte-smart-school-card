@@ -7,6 +7,7 @@ export interface HkteNoticesCardConfig {
   title?: string;
   filter?: NoticeFilter;
   limit?: number;
+  days?: number;
   initially_expanded?: ExpandedMode;
   show_attachments?: boolean;
 }

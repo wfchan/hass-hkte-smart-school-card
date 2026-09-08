@@ -1,6 +1,6 @@
 import { LitElement, css, html, nothing } from "lit";
 import type { PropertyValues } from "lit";
-import { clampLimit, discoverFeeds, visibleNotices } from "./data";
+import { clampDays, clampLimit, discoverFeeds, visibleNotices } from "./data";
 import type {
   ExpandedMode,
   HkteNoticesCardConfig,
@@ -185,6 +185,15 @@ export class HkteNoticesCard extends LitElement {
       cursor: pointer;
       list-style: none;
     }
+    .unread-notice summary {
+      border-inline-start: 3px solid var(--warning-color, #d89b00);
+      padding-inline-start: 10px;
+      background: color-mix(
+        in srgb,
+        var(--warning-color, #d89b00) 9%,
+        transparent
+      );
+    }
     summary::-webkit-details-marker {
       display: none;
     }
@@ -308,8 +317,21 @@ export class HkteNoticesCard extends LitElement {
       }
     }
     @media (prefers-reduced-motion: no-preference) {
+      .unread-notice .unread {
+        animation: unread-pulse 2.2s ease-in-out 3;
+      }
       summary::before {
         transition: transform 120ms ease;
+      }
+      @keyframes unread-pulse {
+        0%,
+        100% {
+          box-shadow: 0 0 0 0 transparent;
+        }
+        45% {
+          box-shadow: 0 0 0 5px
+            color-mix(in srgb, var(--warning-color, #d89b00) 18%, transparent);
+        }
       }
       details[open] .body,
       details[open] .meta {
@@ -343,6 +365,7 @@ export class HkteNoticesCard extends LitElement {
       title: "HKTE Notices",
       filter: "all",
       limit: 20,
+      days: 0,
       initially_expanded: "latest",
       show_attachments: true,
     };
@@ -364,6 +387,7 @@ export class HkteNoticesCard extends LitElement {
         : undefined,
       filter: config.filter === "unread" ? "unread" : "all",
       limit: clampLimit(config.limit),
+      days: clampDays(config.days),
       initially_expanded: expanded,
       show_attachments: config.show_attachments !== false,
     };
@@ -382,7 +406,10 @@ export class HkteNoticesCard extends LitElement {
   private _notice(notice: Notice, index: number, mode: ExpandedMode) {
     const text = labels(this.hass);
     const expanded = mode === "all" || (mode === "latest" && index === 0);
-    return html`<details ?open=${expanded}>
+    return html`<details
+      class=${notice.unread === true ? "unread-notice" : ""}
+      ?open=${expanded}
+    >
       <summary>
         <span class="title-content">
           <span class="title">${notice.title}</span>
@@ -438,8 +465,10 @@ export class HkteNoticesCard extends LitElement {
     const feeds = this._feeds();
     const mode = this.config?.initially_expanded ?? "latest";
     const limit = this.config?.limit ?? 20;
+    const days = this.config?.days ?? 0;
     const total = feeds.reduce(
-      (sum, feed) => sum + visibleNotices(feed, this._filter, limit).length,
+      (sum, feed) =>
+        sum + visibleNotices(feed, this._filter, limit, days).length,
       0,
     );
     return html`<ha-card
@@ -467,7 +496,12 @@ export class HkteNoticesCard extends LitElement {
             : feeds.length === 0
               ? html`<div class="empty">${text.noEntities}</div>`
               : feeds.map((feed) => {
-                  const notices = visibleNotices(feed, this._filter, limit);
+                  const notices = visibleNotices(
+                    feed,
+                    this._filter,
+                    limit,
+                    days,
+                  );
                   const unavailable =
                     feed.state === "unavailable" || feed.state === "unknown";
                   return html`<section class="student">
@@ -528,6 +562,12 @@ export class HkteNoticesCardEditor extends LitElement {
         {
           name: "limit",
           selector: { number: { min: 1, max: 20, mode: "slider" } },
+        },
+        {
+          name: "days",
+          selector: {
+            number: { min: 0, max: 365, mode: "slider" },
+          },
         },
         {
           name: "initially_expanded",

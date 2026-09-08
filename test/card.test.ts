@@ -41,6 +41,11 @@ describe("card", () => {
     expect(card.shadowRoot?.querySelectorAll("a")).toHaveLength(0);
     expect(card.shadowRoot?.textContent).toContain("<img>");
     expect(card.shadowRoot?.textContent).toContain("notice.pdf");
+    expect(
+      card.shadowRoot
+        ?.querySelector("details")
+        ?.classList.contains("unread-notice"),
+    ).toBe(true);
   });
 
   it("marks read notices with a green check status", async () => {
@@ -156,7 +161,7 @@ describe("card", () => {
       new CustomEvent("value-changed", {
         bubbles: true,
         composed: true,
-        detail: { value: { filter: "unread" } },
+        detail: { value: { filter: "unread", days: 30 } },
       }),
     );
     expect(detail).toEqual({
@@ -164,6 +169,7 @@ describe("card", () => {
         type: "custom:hkte-notices-card",
         title: "School",
         filter: "unread",
+        days: 30,
       },
     });
   });

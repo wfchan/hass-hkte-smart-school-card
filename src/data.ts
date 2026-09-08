@@ -7,6 +7,7 @@ import type {
 } from "./types";
 
 const MAX_NOTICES = 20;
+const MAX_DAYS = 365;
 
 function text(value: unknown, fallback = ""): string {
   return typeof value === "string" ? value : fallback;
@@ -104,10 +105,19 @@ export function visibleNotices(
   feed: NoticeFeed,
   filter: "all" | "unread",
   limit: number,
+  days = 0,
+  now = Date.now(),
 ): Notice[] {
   const boundedLimit = Math.min(MAX_NOTICES, Math.max(1, Math.round(limit)));
+  const boundedDays = clampDays(days);
+  const cutoff = now - boundedDays * 24 * 60 * 60 * 1000;
   return feed.notices
     .filter((item) => filter === "all" || item.unread === true)
+    .filter((item) => {
+      if (boundedDays === 0 || !item.issued_at) return true;
+      const issued = Date.parse(item.issued_at);
+      return Number.isNaN(issued) || issued >= cutoff;
+    })
     .slice(0, boundedLimit);
 }
 
@@ -117,4 +127,10 @@ export function clampLimit(limit: unknown): number {
   return Math.min(MAX_NOTICES, Math.max(1, Math.round(value)));
 }
 
+export function clampDays(days: unknown): number {
+  const value = typeof days === "number" && Number.isFinite(days) ? days : 0;
+  return Math.min(MAX_DAYS, Math.max(0, Math.round(value)));
+}
+
 export const MAX_NOTICE_LIMIT = MAX_NOTICES;
+export const MAX_NOTICE_DAYS = MAX_DAYS;
