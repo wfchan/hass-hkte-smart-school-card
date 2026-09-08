@@ -1,5 +1,7 @@
 # HKTE Smart School Notices Card
 
+![HKTE Smart School integration icon](https://raw.githubusercontent.com/wfchan/hass-hkte-smart-school/main/custom_components/hkte_smart_school/brand/icon.png)
+
 Read-only Lovelace card for the [HKTE Smart School Home Assistant integration](https://github.com/wfchan/hass-hkte-smart-school).
 
 ## HACS installation
