@@ -153,6 +153,18 @@ describe("card", () => {
     document.body.append(editor);
     await editor.updateComplete;
 
+    const form = editor.shadowRoot?.querySelector("ha-form") as
+      | (HTMLElement & {
+          schema?: Array<{
+            name: string;
+            selector?: { number?: { min: number; max: number; mode: string } };
+          }>;
+        })
+      | null;
+    expect(
+      form?.schema?.find((field) => field.name === "days")?.selector,
+    ).toEqual({ number: { min: 0, max: 30, mode: "box" } });
+
     let detail: unknown;
     editor.addEventListener("config-changed", (event) => {
       detail = (event as CustomEvent).detail;

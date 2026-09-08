@@ -554,7 +554,7 @@ w._$litElement$ = !0, w.finalized = !0, (mt = v.litElementHydrateSupport) == nul
 const j = v.litElementPolyfillSupport;
 j == null || j({ LitElement: w });
 (v.litElementVersions ?? (v.litElementVersions = [])).push("4.2.2");
-const V = 20, Ft = 365;
+const V = 20, Ft = 30;
 function E(n, t = "") {
   return typeof n == "string" ? n : t;
 }
@@ -1121,7 +1121,7 @@ class Y extends w {
       {
         name: "days",
         selector: {
-          number: { min: 0, max: 365, mode: "slider" }
+          number: { min: 0, max: 30, mode: "box" }
         }
       },
       {

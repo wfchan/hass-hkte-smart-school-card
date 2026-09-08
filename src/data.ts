@@ -7,7 +7,7 @@ import type {
 } from "./types";
 
 const MAX_NOTICES = 20;
-const MAX_DAYS = 365;
+const MAX_DAYS = 30;
 
 function text(value: unknown, fallback = ""): string {
   return typeof value === "string" ? value : fallback;

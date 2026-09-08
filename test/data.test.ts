@@ -63,7 +63,7 @@ describe("notice data", () => {
     expect(clampLimit(99)).toBe(20);
     expect(clampLimit("bad")).toBe(20);
     expect(clampDays(-1)).toBe(0);
-    expect(clampDays(400)).toBe(365);
+    expect(clampDays(31)).toBe(30);
     expect(clampDays("bad")).toBe(0);
   });
 

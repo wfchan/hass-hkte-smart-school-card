@@ -566,7 +566,7 @@ export class HkteNoticesCardEditor extends LitElement {
         {
           name: "days",
           selector: {
-            number: { min: 0, max: 365, mode: "slider" },
+            number: { min: 0, max: 30, mode: "box" },
           },
         },
         {
