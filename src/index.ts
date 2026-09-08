@@ -82,6 +82,20 @@ function formatSize(size: number | null): string {
   return `${(size / 1048576).toFixed(1)} MB`;
 }
 
+function eyeIcon() {
+  return html`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>`;
+}
+
+function repliedIcon() {
+  return html`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <circle cx="12" cy="12" r="9" />
+    <path d="m8 12 2.5 2.5L16 9" />
+  </svg>`;
+}
+
 export class HkteNoticesCard extends LitElement {
   static properties = {
     hass: { attribute: false },
@@ -204,9 +218,14 @@ export class HkteNoticesCard extends LitElement {
       font-weight: 400;
       line-height: 1.35;
     }
-    .unread {
+    .status-icons {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       flex: none;
       margin-left: auto;
+    }
+    .unread {
       border-radius: 4px;
       padding: 2px 6px;
       color: var(--text-primary-color, var(--primary-text-color));
@@ -217,29 +236,23 @@ export class HkteNoticesCard extends LitElement {
     .read-status {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
       flex: none;
-      border: 1px solid var(--success-color, #2e9d68);
-      border-radius: 4px;
-      padding: 2px 6px;
       color: var(--success-color, #2e9d68);
-      background: color-mix(
-        in srgb,
-        var(--success-color, #2e9d68) 12%,
-        transparent
-      );
-      font-size: 0.72rem;
-      font-weight: 650;
     }
-    .status-icon {
-      display: inline-grid;
-      width: 0.95em;
-      height: 0.95em;
-      place-items: center;
-      border: 1px solid currentColor;
-      border-radius: 50%;
-      font-size: 0.78em;
-      line-height: 1;
+    .replied-status {
+      display: inline-flex;
+      align-items: center;
+      color: var(--primary-color);
+    }
+    .status-icon svg {
+      display: block;
+      width: 1.35rem;
+      height: 1.35rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-width: 1.8;
     }
     .body {
       padding: 0 0 14px 20px;
@@ -376,16 +389,35 @@ export class HkteNoticesCard extends LitElement {
           <span class="issued-title"
             >${text.issued}: ${formatDate(notice.issued_at, this.hass)}</span
           > </span
-        >${
-          notice.unread === true
-            ? html`<span class="unread">${text.unread}</span>`
-            : notice.unread === false
-              ? html`<span class="read-status" aria-label=${text.read}
-                  ><span class="status-icon" aria-hidden="true">✓</span
-                  >${text.read}</span
+        ><span class="status-icons">
+          ${
+            notice.unread === true
+              ? html`<span class="unread">${text.unread}</span>`
+              : nothing
+          }
+          ${
+            notice.unread === false
+              ? html`<span
+                  class="status-icon read-status"
+                  title=${text.read}
+                  aria-label=${text.read}
+                  role="img"
+                  >${eyeIcon()}</span
                 >`
               : nothing
-        }
+          }
+          ${
+            notice.replied === true
+              ? html`<span
+                  class="status-icon replied-status"
+                  title=${text.replied}
+                  aria-label=${text.replied}
+                  role="img"
+                  >${repliedIcon()}</span
+                >`
+              : nothing
+          }
+        </span>
       </summary>
       <div class="meta">
         <span>${text.deadline}: ${formatDate(notice.deadline, this.hass)}</span

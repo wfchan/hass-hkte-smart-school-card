@@ -58,6 +58,7 @@ describe("card", () => {
                 content: "Already reviewed",
                 issued_at: "2026-09-04T09:30:00+08:00",
                 unread: false,
+                replied: true,
               },
             ],
           },
@@ -67,8 +68,12 @@ describe("card", () => {
     document.body.append(card);
     await card.updateComplete;
     const badge = card.shadowRoot?.querySelector(".read-status");
-    expect(badge?.textContent).toContain("Read");
-    expect(badge?.querySelector(".status-icon")?.textContent).toBe("✓");
+    expect(badge?.getAttribute("aria-label")).toBe("Read");
+    expect(badge?.querySelector("svg")).not.toBeNull();
+    const replied = card.shadowRoot?.querySelector(".replied-status");
+    expect(replied?.getAttribute("aria-label")).toBe("Replied");
+    expect(replied?.querySelector("svg")).not.toBeNull();
+    expect(badge?.textContent?.trim()).toBe("");
     expect(
       card.shadowRoot?.querySelector(".issued-title")?.textContent,
     ).toContain("Issued");
