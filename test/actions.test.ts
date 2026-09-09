@@ -55,6 +55,10 @@ describe("notice actions", () => {
           enabled: true,
           status: "completed",
           summary: {
+            dates: [],
+            costs: [],
+            actions: [],
+            questions: [],
             highlights: [
               {
                 text: "<script>untrusted</script>",
@@ -81,6 +85,8 @@ describe("notice actions", () => {
     );
     expect(element.shadowRoot!.querySelector("script")).toBeNull();
     expect(element.shadowRoot!.textContent).toContain("重新分析");
+    expect(element.shadowRoot!.querySelectorAll("h4")).toHaveLength(5);
+    expect(element.shadowRoot!.textContent).toContain("未提供");
     fetch.mockResolvedValue(response({ enabled: true, status: "running" }));
     element.shadowRoot!.querySelectorAll("button")[1].click();
     await settle();
@@ -135,6 +141,14 @@ describe("notice actions", () => {
           status: "partial",
           stale: true,
           missing: [{ filename: "broken.pdf", error: "unreadable_file" }],
+          summary: {
+            highlights: [{ text: "Example", sources: [] }],
+            dates: [],
+            costs: [],
+            actions: [],
+            questions: [],
+          },
+          sources: [],
         }),
       );
     const element = await mount(fetch);
@@ -146,5 +160,28 @@ describe("notice actions", () => {
     expect(element.shadowRoot!.textContent).toContain("部分完成");
     expect(element.shadowRoot!.textContent).toContain("broken.pdf");
     expect(element.shadowRoot!.textContent).toContain("請重新分析");
+  });
+
+  it("rejects malformed API data without breaking rendering and can retry", async () => {
+    const fetch = vi
+      .fn()
+      .mockResolvedValueOnce(
+        response({
+          enabled: true,
+          status: "completed",
+          summary: { highlights: "broken" },
+        }),
+      )
+      .mockResolvedValueOnce(response({ enabled: true, status: "idle" }));
+    const element = await mount(fetch);
+    expect(
+      element.shadowRoot!.querySelector('[role="alert"]')?.textContent,
+    ).toContain("AI 回應格式");
+    expect(element.shadowRoot!.querySelector(".summary")).toBeNull();
+    Array.from(element.shadowRoot!.querySelectorAll("button"))
+      .find((b) => b.textContent?.includes("重試連線"))!
+      .click();
+    await settle();
+    expect(element.shadowRoot!.querySelector('[role="alert"]')).toBeNull();
   });
 });

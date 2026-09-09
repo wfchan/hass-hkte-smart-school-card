@@ -1,26 +1,11 @@
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import type { HomeAssistant, Notice, NoticeAttachment } from "./types";
-
-interface Source {
-  attachment_id: string;
-  filename: string;
-  page: number;
-}
-interface SummaryItem {
-  text: string;
-  sources: Omit<Source, "filename">[];
-}
-interface AnalysisState {
-  enabled: boolean;
-  status: "idle" | "running" | "completed" | "partial" | "failed";
-  stage?: string;
-  processed?: number;
-  error?: string;
-  stale?: boolean;
-  summary?: Record<string, SummaryItem[]>;
-  sources?: Source[];
-  missing?: { filename: string; error: string }[];
-}
+import {
+  parseAnalysisState,
+  type AnalysisState,
+  type Source,
+  type SUMMARY_SECTIONS,
+} from "./analysis-state";
 
 const ERRORS: Record<string, [string, string]> = {
   notice_truncated: [
@@ -94,6 +79,10 @@ const ERRORS: Record<string, [string, string]> = {
   invalid_ai_response: [
     "AI 回應格式或來源引用無效，請重試。",
     "Invalid AI response or source references. Try again.",
+  ],
+  ai_incomplete_response: [
+    "AI 回應被截斷或拒絕處理，未產生新摘要。請重試或更換模型。",
+    "AI response was truncated or refused. No new summary was saved. Retry or change model.",
   ],
   account_busy: [
     "正在分析另一份通告，請稍後重試。",
@@ -276,16 +265,20 @@ export class HkteNoticeActions extends LitElement {
   private async load() {
     const generation = this.generation;
     try {
-      const state = (await (
-        await this.request(`${this.path}/analysis`)
-      ).json()) as AnalysisState;
+      const state = parseAnalysisState(
+        await (await this.request(`${this.path}/analysis`)).json(),
+      );
       if (!this.isConnected || generation !== this.generation) return;
       this.state = state;
       this.error = "";
       if (state.status === "running")
         this.timer = setTimeout(() => void this.load(), 2000);
-    } catch {
-      if (generation === this.generation) this.error = "unavailable";
+    } catch (error) {
+      if (generation === this.generation)
+        this.error =
+          error instanceof Error && error.message === "invalid_ai_response"
+            ? error.message
+            : "unavailable";
     }
   }
   private async start() {
@@ -294,13 +287,15 @@ export class HkteNoticeActions extends LitElement {
     this.error = "";
     clearTimeout(this.timer);
     try {
-      const state = (await (
-        await this.request(`${this.path}/analysis`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ force: Boolean(this.state?.summary) }),
-        })
-      ).json()) as AnalysisState;
+      const state = parseAnalysisState(
+        await (
+          await this.request(`${this.path}/analysis`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ force: Boolean(this.state?.summary) }),
+          })
+        ).json(),
+      );
       if (generation !== this.generation) return;
       this.state = state;
       if (state.status === "running")
@@ -348,7 +343,7 @@ export class HkteNoticeActions extends LitElement {
     if (!this.notice) return nothing;
     const state = this.state;
     const busy = state?.status === "running" || this.submitting;
-    const sections: [string, string, string][] = [
+    const sections: [(typeof SUMMARY_SECTIONS)[number], string, string][] = [
       ["highlights", "內容重點", "Highlights"],
       ["dates", "重要日期", "Important dates"],
       ["costs", "費用", "Costs"],
@@ -412,15 +407,21 @@ export class HkteNoticeActions extends LitElement {
                 ([key, zh, en]) =>
                   html`<h4>${this.text(zh, en)}</h4>
                     <ul>
-                      ${state.summary?.[key]?.map(
-                        (item) =>
-                          html`<li>
-                            <span class="summary-text">${item.text}</span>
-                            <div class="sources">
-                              ${item.sources.map((ref) => this.reference(ref)).join("; ")}
-                            </div>
-                          </li>`,
-                      )}
+                      ${
+                        state.summary?.[key]?.length
+                          ? state.summary[key].map(
+                              (item) =>
+                                html`<li>
+                                  <span class="summary-text">${item.text}</span>
+                                  <div class="sources">
+                                    ${item.sources.map((ref) => this.reference(ref)).join("; ")}
+                                  </div>
+                                </li>`,
+                            )
+                          : html`<li class="metadata">
+                              ${this.text("未提供", "Not provided")}
+                            </li>`
+                      }
                     </ul>`,
               )}
             </div>`
