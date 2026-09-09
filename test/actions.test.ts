@@ -79,12 +79,17 @@ describe("notice actions", () => {
     expect(element.shadowRoot!.textContent).toContain("處理附件頁面");
     await vi.advanceTimersByTimeAsync(2000);
     await settle();
-    expect(element.shadowRoot!.textContent).toContain("sample.pdf · 第1頁");
+    expect(element.shadowRoot!.textContent).not.toContain("sample.pdf · 第1頁");
+    expect(
+      element.shadowRoot!.querySelector(".summary")!.textContent,
+    ).not.toContain("sample.pdf");
     expect(element.shadowRoot!.textContent).toContain(
       "<script>untrusted</script>",
     );
     expect(element.shadowRoot!.querySelector("script")).toBeNull();
-    expect(element.shadowRoot!.textContent).toContain("重新分析");
+    expect(
+      element.shadowRoot!.querySelector('button[aria-label="重新分析"]'),
+    ).not.toBeNull();
     expect(element.shadowRoot!.querySelectorAll("h4")).toHaveLength(5);
     expect(element.shadowRoot!.textContent).toContain("未提供");
     fetch.mockResolvedValue(response({ enabled: true, status: "running" }));

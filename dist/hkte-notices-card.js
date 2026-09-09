@@ -777,13 +777,6 @@ class Y extends w {
       );
     }
   }
-  reference(e) {
-    var n, r;
-    const s = (r = (n = this.state) == null ? void 0 : n.sources) == null ? void 0 : r.find(
-      (a) => a.attachment_id === e.attachment_id && a.page === e.page
-    );
-    return s ? e.page === 0 ? this.text("通告正文", "Notice text") : `${s.filename} · ${this.text("第", "p. ")}${e.page}${this.text("頁", "")}` : "";
-  }
   render() {
     var a;
     if (!this.notice) return c;
@@ -819,10 +812,17 @@ class Y extends w {
       }
     )}
             </div>` : c}
-      <button ?disabled=${s || !(e != null && e.enabled)} @click=${() => this.start()}>
-        <ha-icon icon="mdi:text-box-search-outline"></ha-icon
-        >${e != null && e.summary ? this.text("重新分析", "Analyze again") : this.text("AI 整理重點", "AI summary")}
-      </button>
+      <div class="action-row">
+        <button
+          class="icon"
+          title=${e != null && e.summary ? this.text("重新分析", "Analyze again") : this.text("AI 整理重點", "AI summary")}
+          aria-label=${e != null && e.summary ? this.text("重新分析", "Analyze again") : this.text("AI 整理重點", "AI summary")}
+          ?disabled=${s || !(e != null && e.enabled)}
+          @click=${() => this.start()}
+        >
+          <ha-icon icon="mdi:text-box-search-outline"></ha-icon>
+        </button>
+      </div>
       ${e && !e.enabled ? d`<p class="progress">${this.message("ai_not_configured")}</p>` : c}
       ${s ? d`<p class="progress" role="status">${r} (${(e == null ? void 0 : e.processed) ?? 0}/${this.notice.attachments.length})</p>` : c}
       ${this.error || e != null && e.error ? d`<p class="error" role="alert">
@@ -841,9 +841,6 @@ class Y extends w {
                       ${(h = (u = e.summary) == null ? void 0 : u[l]) != null && h.length ? e.summary[l].map(
           (m) => d`<li>
                                   <span class="summary-text">${m.text}</span>
-                                  <div class="sources">
-                                    ${m.sources.map((f) => this.reference(f)).join("; ")}
-                                  </div>
                                 </li>`
         ) : d`<li class="metadata">
                               ${this.text("未提供", "Not provided")}
@@ -885,6 +882,12 @@ y(Y, "properties", {
         transparent
       );
     }
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+    }
     .file {
       display: flex;
       align-items: center;
@@ -899,7 +902,6 @@ y(Y, "properties", {
       overflow-wrap: anywhere;
     }
     .metadata,
-    .sources,
     .progress {
       color: var(--secondary-text-color);
       font-size: 12px;

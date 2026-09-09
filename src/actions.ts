@@ -125,6 +125,12 @@ export class HkteNoticeActions extends LitElement {
         transparent
       );
     }
+    .action-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+    }
     .file {
       display: flex;
       align-items: center;
@@ -139,7 +145,6 @@ export class HkteNoticeActions extends LitElement {
       overflow-wrap: anywhere;
     }
     .metadata,
-    .sources,
     .progress {
       color: var(--secondary-text-color);
       font-size: 12px;
@@ -348,15 +353,6 @@ export class HkteNoticeActions extends LitElement {
       );
     }
   }
-  private reference(ref: Omit<Source, "filename">) {
-    const source = this.state?.sources?.find(
-      (s) => s.attachment_id === ref.attachment_id && s.page === ref.page,
-    );
-    if (!source) return "";
-    return ref.page === 0
-      ? this.text("通告正文", "Notice text")
-      : `${source.filename} · ${this.text("第", "p. ")}${ref.page}${this.text("頁", "")}`;
-  }
   protected render() {
     if (!this.notice) return nothing;
     const state = this.state;
@@ -401,10 +397,17 @@ export class HkteNoticeActions extends LitElement {
             </div>`
           : nothing
       }
-      <button ?disabled=${busy || !state?.enabled} @click=${() => this.start()}>
-        <ha-icon icon="mdi:text-box-search-outline"></ha-icon
-        >${state?.summary ? this.text("重新分析", "Analyze again") : this.text("AI 整理重點", "AI summary")}
-      </button>
+      <div class="action-row">
+        <button
+          class="icon"
+          title=${state?.summary ? this.text("重新分析", "Analyze again") : this.text("AI 整理重點", "AI summary")}
+          aria-label=${state?.summary ? this.text("重新分析", "Analyze again") : this.text("AI 整理重點", "AI summary")}
+          ?disabled=${busy || !state?.enabled}
+          @click=${() => this.start()}
+        >
+          <ha-icon icon="mdi:text-box-search-outline"></ha-icon>
+        </button>
+      </div>
       ${state && !state.enabled ? html`<p class="progress">${this.message("ai_not_configured")}</p>` : nothing}
       ${busy ? html`<p class="progress" role="status">${stage} (${state?.processed ?? 0}/${this.notice.attachments.length})</p>` : nothing}
       ${
@@ -431,9 +434,6 @@ export class HkteNoticeActions extends LitElement {
                               (item) =>
                                 html`<li>
                                   <span class="summary-text">${item.text}</span>
-                                  <div class="sources">
-                                    ${item.sources.map((ref) => this.reference(ref)).join("; ")}
-                                  </div>
                                 </li>`,
                             )
                           : html`<li class="metadata">
