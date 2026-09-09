@@ -39,7 +39,12 @@ Download buttons work without AI configuration. Files are fetched with your HA l
 
 The card shows progress, safe errors, partial results and missing filenames. Traditional Chinese highlights, dates, costs, parent actions and questions are shown without attachment filenames or page-number references. Existing summaries are loaded without a new AI call, retained locally for 30 days, and marked stale after source changes. **重新分析** explicitly replaces a result. Each analysis permits 10 attachments, 40 MiB total and 20 pages; each download is limited to 20 MiB. Check summaries against original documents before acting.
 
-Version **0.2.5** gives deadlines a calendar icon and highlighted callout, and removes redundant horizontal separators between notice sections. Version **0.2.4** places the icon-only analyze/reanalyze action in the same attachment row as download and hides the `FILE` MIME label. Version **0.2.3** hides AI source filenames/page numbers and places the icon-only analyze/reanalyze action beside attachment controls. Version **0.2.2** presents each notice as a distinct responsive panel with separated header, deadline, body, attachments and AI summary regions. Version **0.2.1** validates API results before rendering: all five sections, bounded plain text and valid source/page references are required. Empty sections show **未提供 / Not provided**. Malformed results show a retryable error, while an existing valid summary stays visible. Use integration **0.4.3** for MiniMax-M3 reasoning separation, schema negotiation, bounded format retry, incomplete-response detection and automatic queued analysis of new notices. OpenAI-compatible models still need image-input support; consistent display is not a guarantee of factual accuracy.
+The card validates all five AI summary sections, bounds displayed text and source
+references, shows empty sections as **未提供 / Not provided**, and keeps an existing
+valid summary visible when a new response is malformed. It supports MiniMax-M3 with
+the integration's schema negotiation, bounded retry, incomplete-response detection
+and optional FIFO analysis queue. OpenAI-compatible models still need image-input
+support; consistent display is not a guarantee of factual accuracy.
 
 Downloads and summaries require entity read permission. API keys, downloaded bytes and summaries are not written into card configuration or entity state. See the integration README for privacy and storage details. `show_attachments` controls both metadata and download rows; it does not exclude files from whole-notice AI analysis.
 
