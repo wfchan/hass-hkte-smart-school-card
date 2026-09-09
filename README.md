@@ -12,7 +12,7 @@ The preview uses synthetic sample content and contains no student data.
 
 ## HACS installation
 
-In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. Card **0.2.5** is the current release and requires integration **0.4.3** for downloads, AI summaries and automatic new-notice analysis.
+In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. Card **0.2.5** is the current release and requires integration **0.4.4** for downloads, AI summaries and automatic new-notice analysis.
 
 ## Dashboard card
 
