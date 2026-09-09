@@ -1,18 +1,16 @@
 # HKTE Smart School Notices Card
 
-![HKTE Smart School integration icon](https://raw.githubusercontent.com/wfchan/hass-hkte-smart-school/main/custom_components/hkte_smart_school/brand/icon.png)
-
 Read-only Lovelace card for the [HKTE Smart School Home Assistant integration](https://github.com/wfchan/hass-hkte-smart-school).
 
 ## Card preview
 
 ![HKTE notices card layout using synthetic sample data](screenshots/card-layout.png)
 
-The preview uses synthetic sample content and contains no student data.
+The preview shows the current deadline and attachment controls with synthetic sample content and no real student data.
 
 ## HACS installation
 
-In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. Card **0.2.5** is the current release and requires integration **0.4.4** for downloads, AI summaries and automatic new-notice analysis.
+In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. The recommended pairing is card **0.2.6** with integration **0.4.5**. Downloads and manual AI summaries require integration **0.4.0** or newer; optional automatic new-notice analysis requires **0.4.3** or newer.
 
 ## Dashboard card
 
@@ -42,8 +40,6 @@ Download buttons work without AI configuration. Files are fetched with your HA l
 The card shows progress, safe errors, partial results and missing filenames. Traditional Chinese highlights, dates, costs, parent actions and questions are shown without attachment filenames or page-number references. Existing summaries are loaded without a new AI call, retained locally for 30 days, and marked stale after source changes. **重新分析** explicitly replaces a result. Each analysis permits 10 attachments, 40 MiB total and 20 pages; each download is limited to 20 MiB. Check summaries against original documents before acting.
 
 Version **0.2.5** gives deadlines a calendar icon and highlighted callout, and removes redundant horizontal separators between notice sections. Version **0.2.4** places the icon-only analyze/reanalyze action in the same attachment row as download and hides the `FILE` MIME label. Version **0.2.3** hides AI source filenames/page numbers and places the icon-only analyze/reanalyze action beside attachment controls. Version **0.2.2** presents each notice as a distinct responsive panel with separated header, deadline, body, attachments and AI summary regions. Version **0.2.1** validates API results before rendering: all five sections, bounded plain text and valid source/page references are required. Empty sections show **未提供 / Not provided**. Malformed results show a retryable error, while an existing valid summary stays visible. Use integration **0.4.3** for MiniMax-M3 reasoning separation, schema negotiation, bounded format retry, incomplete-response detection and automatic queued analysis of new notices. OpenAI-compatible models still need image-input support; consistent display is not a guarantee of factual accuracy.
-
-The integration's unofficial brand icon is generated artwork stored in its repository at `custom_components/hkte_smart_school/brand/icon.png`; it contains no school logo, student data or credentials.
 
 Downloads and summaries require entity read permission. API keys, downloaded bytes and summaries are not written into card configuration or entity state. See the integration README for privacy and storage details. `show_attachments` controls both metadata and download rows; it does not exclude files from whole-notice AI analysis.
 

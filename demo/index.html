@@ -42,17 +42,36 @@
     <hkte-notices-card id="card"></hkte-notices-card>
     <script type="module">
       import "/src/index.ts";
+      import {
+        mdiCalendarClock,
+        mdiDownload,
+        mdiTextBoxSearchOutline,
+      } from "@mdi/js";
+      const iconPaths = {
+        "mdi:calendar-clock": mdiCalendarClock,
+        "mdi:download": mdiDownload,
+        "mdi:text-box-search-outline": mdiTextBoxSearchOutline,
+      };
       customElements.define(
         "ha-icon",
         class extends HTMLElement {
           connectedCallback() {
-            const icon = this.getAttribute("icon");
-            this.textContent =
-              icon === "mdi:download"
-                ? "↓"
-                : icon === "mdi:calendar-clock"
-                  ? "▣"
-                  : "AI";
+            const svg = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "svg",
+            );
+            svg.setAttribute("viewBox", "0 0 24 24");
+            svg.setAttribute("width", "24");
+            svg.setAttribute("height", "24");
+            svg.setAttribute("fill", "currentColor");
+            svg.setAttribute("aria-hidden", "true");
+            const path = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "path",
+            );
+            path.setAttribute("d", iconPaths[this.getAttribute("icon")] || "");
+            svg.append(path);
+            this.replaceChildren(svg);
           }
         },
       );
