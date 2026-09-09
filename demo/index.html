@@ -46,8 +46,13 @@
         "ha-icon",
         class extends HTMLElement {
           connectedCallback() {
+            const icon = this.getAttribute("icon");
             this.textContent =
-              this.getAttribute("icon") === "mdi:download" ? "↓" : "AI";
+              icon === "mdi:download"
+                ? "↓"
+                : icon === "mdi:calendar-clock"
+                  ? "▣"
+                  : "AI";
           }
         },
       );

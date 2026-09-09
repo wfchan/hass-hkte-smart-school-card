@@ -71,6 +71,7 @@ describe("card", () => {
                 title: "Read notice",
                 content: "Already reviewed",
                 issued_at: "2026-09-04T09:30:00+08:00",
+                deadline: "2026-09-10T23:59:00+08:00",
                 unread: false,
                 replied: true,
               },
@@ -82,6 +83,15 @@ describe("card", () => {
     document.body.append(card);
     await card.updateComplete;
     const badge = card.shadowRoot?.querySelector(".read-status");
+    expect(
+      card.shadowRoot?.querySelector(".deadline-icon")?.getAttribute("icon"),
+    ).toBe("mdi:calendar-clock");
+    expect(card.shadowRoot?.querySelector(".deadline-label")?.textContent).toBe(
+      "Deadline",
+    );
+    expect(
+      card.shadowRoot?.querySelector(".deadline-value")?.textContent,
+    ).toContain("2026");
     expect(badge?.getAttribute("aria-label")).toBe("Read");
     expect(badge?.querySelector("svg")).not.toBeNull();
     const replied = card.shadowRoot?.querySelector(".replied-status");

@@ -271,8 +271,6 @@ export class HkteNoticesCard extends LitElement {
     .body {
       margin: 0 14px;
       padding: 14px 0 16px;
-      border-top: 1px solid
-        color-mix(in srgb, var(--divider-color) 65%, transparent);
       white-space: pre-wrap;
       overflow-wrap: anywhere;
       line-height: 1.55;
@@ -287,17 +285,33 @@ export class HkteNoticesCard extends LitElement {
       font-size: 0.8rem;
     }
     .deadline {
-      display: inline-flex;
-      align-items: baseline;
-      gap: 6px;
-      font-weight: 600;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr);
+      align-items: center;
+      gap: 3px 10px;
+      width: 100%;
+      margin: 2px 0 4px;
+      color: var(--primary-text-color);
+    }
+    .deadline-icon {
+      grid-row: span 2;
+      width: 24px;
+      height: 24px;
+      --mdc-icon-size: 24px;
+      color: var(--primary-color);
     }
     .deadline-label {
       color: var(--secondary-text-color);
       font-size: 0.72rem;
       font-weight: 500;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .deadline-value {
+      min-width: 0;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.4;
+      overflow-wrap: anywhere;
     }
     .status {
       color: var(--primary-color);
@@ -474,10 +488,17 @@ export class HkteNoticesCard extends LitElement {
         </span>
       </summary>
       <div class="meta">
-        <span class="deadline"
-          ><span class="deadline-label">${text.deadline}</span
-          >${formatDate(notice.deadline, this.hass)}</span
-        >
+        <span class="deadline">
+          <ha-icon
+            class="deadline-icon"
+            icon="mdi:calendar-clock"
+            aria-hidden="true"
+          ></ha-icon>
+          <span class="deadline-label">${text.deadline}</span>
+          <span class="deadline-value"
+            >${formatDate(notice.deadline, this.hass)}</span
+          >
+        </span>
       </div>
       <div class="body">${notice.content || text.noBody}</div>
       ${this.hass?.fetchWithAuth ? html`<hkte-notice-actions .hass=${this.hass} .entityId=${entityId} .notice=${notice} .showAttachments=${this.config?.show_attachments !== false}></hkte-notice-actions>` : nothing}

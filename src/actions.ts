@@ -109,8 +109,6 @@ export class HkteNoticeActions extends LitElement {
       display: block;
       margin: 0 14px 14px;
       padding-top: 12px;
-      border-top: 1px solid
-        color-mix(in srgb, var(--divider-color) 65%, transparent);
       font-size: 14px;
     }
     .files {
@@ -141,8 +139,6 @@ export class HkteNoticeActions extends LitElement {
       display: flex;
       align-items: center;
       gap: 8px;
-      border-top: 1px solid
-        color-mix(in srgb, var(--divider-color) 70%, transparent);
       padding: 8px 0;
     }
     .name {
