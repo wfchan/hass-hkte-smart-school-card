@@ -42,6 +42,35 @@
     <hkte-notices-card id="card"></hkte-notices-card>
     <script type="module">
       import "/src/index.ts";
+      customElements.define(
+        "ha-icon",
+        class extends HTMLElement {
+          connectedCallback() {
+            this.textContent =
+              this.getAttribute("icon") === "mdi:download" ? "↓" : "AI";
+          }
+        },
+      );
+      const jobs = new Map();
+      const result = {
+        enabled: true,
+        status: "completed",
+        sources: [
+          { attachment_id: "a1", filename: "學校旅行家長通告.pdf", page: 1 },
+        ],
+        summary: Object.fromEntries(
+          [
+            ["highlights", "學校旅行安排，請穿著運動服。"],
+            ["dates", "9 月 12 日上午 8 時回校。"],
+            ["costs", "未提供"],
+            ["actions", "準備水樽及運動服，確認集合時間。"],
+            ["questions", "雨天安排未提供，請向學校確認。"],
+          ].map(([key, text]) => [
+            key,
+            [{ text, sources: [{ attachment_id: "a1", page: 1 }] }],
+          ]),
+        ),
+      };
       const longTitle =
         "學校旅行與戶外學習日重要安排及家長須知 Very long notice title for responsive testing";
       const card = document.querySelector("#card");
@@ -49,11 +78,36 @@
         type: "custom:hkte-notices-card",
         title: "HKTE 通告",
         filter: "all",
-        limit: 20,
+        limit: 5,
         initially_expanded: "latest",
         show_attachments: true,
       });
       card.hass = {
+        fetchWithAuth: async (path, init) => {
+          if (path.includes("/attachment/"))
+            return new Response("Synthetic demo attachment", {
+              headers: { "Content-Type": "text/plain" },
+            });
+          if (init?.method === "POST") {
+            jobs.set(path, Date.now());
+            return Response.json({
+              enabled: true,
+              status: "running",
+              stage: "downloading",
+              processed: 0,
+            });
+          }
+          if (!jobs.has(path))
+            return Response.json({ enabled: true, status: "idle" });
+          if (Date.now() - jobs.get(path) < 3000)
+            return Response.json({
+              enabled: true,
+              status: "running",
+              stage: "analyzing",
+              processed: 1,
+            });
+          return Response.json(result);
+        },
         locale: { language: "zh-Hant" },
         states: {
           "sensor.chan_tai_man_notice_content": {
@@ -74,6 +128,7 @@
                   content_truncated: false,
                   attachments: [
                     {
+                      id: "a1",
                       filename: "學校旅行家長通告及回條-超長檔案名稱測試.pdf",
                       mime_type: "application/pdf",
                       size: 245760,

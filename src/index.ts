@@ -1,4 +1,5 @@
 import { LitElement, css, html, nothing } from "lit";
+import "./actions";
 import { clampDays, clampLimit, discoverFeeds, visibleNotices } from "./data";
 import type {
   ExpandedMode,
@@ -374,7 +375,12 @@ export class HkteNoticesCard extends LitElement {
   private _feeds(): NoticeFeed[] {
     return discoverFeeds(this.hass ?? { states: {} }, this.config?.entities);
   }
-  private _notice(notice: Notice, index: number, mode: ExpandedMode) {
+  private _notice(
+    notice: Notice,
+    index: number,
+    mode: ExpandedMode,
+    entityId: string,
+  ) {
     const text = labels(this.hass);
     const expanded = mode === "all" || (mode === "latest" && index === 0);
     return html`<details
@@ -421,8 +427,11 @@ export class HkteNoticesCard extends LitElement {
         <span>${text.deadline}: ${formatDate(notice.deadline, this.hass)}</span>
       </div>
       <div class="body">${notice.content || text.noBody}</div>
+      ${this.hass?.fetchWithAuth ? html`<hkte-notice-actions .hass=${this.hass} .entityId=${entityId} .notice=${notice} .showAttachments=${this.config?.show_attachments !== false}></hkte-notice-actions>` : nothing}
       ${notice.content_truncated ? html`<div class="hint">${text.truncated}</div>` : nothing}${
-        this.config?.show_attachments && notice.attachments.length
+        !this.hass?.fetchWithAuth &&
+        this.config?.show_attachments &&
+        notice.attachments.length
           ? html`<div class="attachment-label meta">
                 <span>${text.attachments}</span>
               </div>
@@ -469,7 +478,7 @@ export class HkteNoticesCard extends LitElement {
                           </h2>`
                         : nothing
                     }
-                    ${unavailable ? html`<div class="hint error">${text.unavailable}</div>` : notices.length ? notices.map((item, index) => this._notice(item, index, mode)) : html`<div class="empty">${text.noNotices}</div>`}${feed.hasMore && notices.length ? html`<div class="hint">${text.more}</div>` : nothing}
+                    ${unavailable ? html`<div class="hint error">${text.unavailable}</div>` : notices.length ? notices.map((item, index) => this._notice(item, index, mode, feed.entityId)) : html`<div class="empty">${text.noNotices}</div>`}${feed.hasMore && notices.length ? html`<div class="hint">${text.more}</div>` : nothing}
                   </section>`;
                 })
         }

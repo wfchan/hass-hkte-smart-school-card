@@ -28,6 +28,7 @@ function attachment(value: unknown): NoticeAttachment | null {
   const filename = text(item.filename);
   if (!filename) return null;
   return {
+    id: text(item.id),
     filename,
     mime_type: text(item.mime_type, "application/octet-stream"),
     size: typeof item.size === "number" && item.size >= 0 ? item.size : null,

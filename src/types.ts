@@ -20,12 +20,14 @@ export interface HassEntity {
 }
 
 export interface HomeAssistant {
+  fetchWithAuth?: (path: string, init?: RequestInit) => Promise<Response>;
   states: Record<string, HassEntity>;
   locale?: { language?: string };
   config?: { time_zone?: string; language?: string };
 }
 
 export interface NoticeAttachment {
+  id: string;
   filename: string;
   mime_type: string;
   size: number | null;
