@@ -139,41 +139,61 @@ export class HkteNoticesCard extends LitElement {
       white-space: nowrap;
     }
     .content {
-      padding: 4px 20px 18px;
+      padding: 8px 16px 20px;
     }
     .student {
-      padding-top: 14px;
+      padding-top: 10px;
     }
     .student + .student {
-      border-top: 1px solid var(--divider-color);
-      margin-top: 10px;
+      border-top: 1px solid
+        color-mix(in srgb, var(--divider-color) 70%, transparent);
+      margin-top: 18px;
+      padding-top: 18px;
     }
     .student-title {
-      margin: 0 0 8px;
-      font-size: 0.98rem;
-      font-weight: 600;
+      margin: 0 4px 10px;
+      color: var(--secondary-text-color);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
     details {
-      border-bottom: 1px solid var(--divider-color);
+      margin: 10px 0;
+      overflow: hidden;
+      border: 1px solid
+        color-mix(in srgb, var(--divider-color) 85%, transparent);
+      border-radius: 8px;
+      background: color-mix(
+        in srgb,
+        var(--card-background-color, var(--ha-card-background, transparent)) 92%,
+        var(--primary-color) 8%
+      );
+      box-shadow: 0 1px 2px
+        color-mix(in srgb, var(--primary-text-color) 8%, transparent);
     }
-    details:last-child {
-      border-bottom: 0;
+    details[open] {
+      border-color: color-mix(
+        in srgb,
+        var(--primary-color) 28%,
+        var(--divider-color)
+      );
     }
     summary {
       display: flex;
       align-items: flex-start;
       gap: 8px;
       min-width: 0;
-      padding: 13px 0;
+      padding: 15px 14px;
       cursor: pointer;
       list-style: none;
     }
     .unread-notice summary {
       border-inline-start: 3px solid var(--warning-color, #d89b00);
-      padding-inline-start: 10px;
+      padding-inline-start: 11px;
       background: color-mix(
         in srgb,
-        var(--warning-color, #d89b00) 9%,
+        var(--warning-color, #d89b00) 8%,
         transparent
       );
     }
@@ -195,7 +215,9 @@ export class HkteNoticesCard extends LitElement {
       display: block;
       min-width: 0;
       overflow-wrap: anywhere;
-      font-weight: 550;
+      font-size: 1rem;
+      font-weight: 650;
+      line-height: 1.35;
     }
     .title-content {
       display: block;
@@ -247,7 +269,10 @@ export class HkteNoticesCard extends LitElement {
       stroke-width: 1.8;
     }
     .body {
-      padding: 0 0 14px 20px;
+      margin: 0 14px;
+      padding: 14px 0 16px;
+      border-top: 1px solid
+        color-mix(in srgb, var(--divider-color) 65%, transparent);
       white-space: pre-wrap;
       overflow-wrap: anywhere;
       line-height: 1.55;
@@ -256,9 +281,23 @@ export class HkteNoticesCard extends LitElement {
       display: flex;
       flex-wrap: wrap;
       gap: 6px 14px;
-      padding: 0 0 10px 20px;
+      margin: 0 14px;
+      padding: 12px 0 0;
       color: var(--secondary-text-color);
       font-size: 0.8rem;
+    }
+    .deadline {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      font-weight: 600;
+    }
+    .deadline-label {
+      color: var(--secondary-text-color);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
     .status {
       color: var(--primary-color);
@@ -267,7 +306,8 @@ export class HkteNoticesCard extends LitElement {
       display: flex;
       flex-wrap: wrap;
       gap: 4px 8px;
-      padding: 4px 0 4px 20px;
+      margin: 0 14px;
+      padding: 4px 0;
       color: var(--secondary-text-color);
       font-size: 0.8rem;
     }
@@ -293,6 +333,16 @@ export class HkteNoticesCard extends LitElement {
         align-items: flex-start;
         flex-direction: column;
         gap: 3px;
+      }
+      .content {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      summary {
+        padding: 13px 11px;
+      }
+      .title {
+        font-size: 0.94rem;
       }
     }
     @media (prefers-reduced-motion: no-preference) {
@@ -424,7 +474,10 @@ export class HkteNoticesCard extends LitElement {
         </span>
       </summary>
       <div class="meta">
-        <span>${text.deadline}: ${formatDate(notice.deadline, this.hass)}</span>
+        <span class="deadline"
+          ><span class="deadline-label">${text.deadline}</span
+          >${formatDate(notice.deadline, this.hass)}</span
+        >
       </div>
       <div class="body">${notice.content || text.noBody}</div>
       ${this.hass?.fetchWithAuth ? html`<hkte-notice-actions .hass=${this.hass} .entityId=${entityId} .notice=${notice} .showAttachments=${this.config?.show_attachments !== false}></hkte-notice-actions>` : nothing}

@@ -48,7 +48,7 @@ const Rt = (i) => new wt(typeof i == "string" ? i : i + "", void 0, Q), tt = (i,
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: jt, defineProperty: Dt, getOwnPropertyDescriptor: Lt, getOwnPropertyNames: Bt, getOwnPropertySymbols: Wt, getPrototypeOf: Kt } = Object, _ = globalThis, at = _.trustedTypes, Ft = at ? at.emptyScript : "", W = _.reactiveElementPolyfillSupport, z = (i, t) => i, V = { toAttribute(i, t) {
+const { is: jt, defineProperty: Dt, getOwnPropertyDescriptor: Lt, getOwnPropertyNames: Bt, getOwnPropertySymbols: Wt, getPrototypeOf: Kt } = Object, _ = globalThis, at = _.trustedTypes, Ft = at ? at.emptyScript : "", W = _.reactiveElementPolyfillSupport, U = (i, t) => i, V = { toAttribute(i, t) {
   switch (t) {
     case Boolean:
       i = i ? Ft : null;
@@ -106,13 +106,13 @@ let T = class extends HTMLElement {
     return this.elementProperties.get(t) ?? ot;
   }
   static _$Ei() {
-    if (this.hasOwnProperty(z("elementProperties"))) return;
+    if (this.hasOwnProperty(U("elementProperties"))) return;
     const t = Kt(this);
     t.finalize(), t.l !== void 0 && (this.l = [...t.l]), this.elementProperties = new Map(t.elementProperties);
   }
   static finalize() {
-    if (this.hasOwnProperty(z("finalized"))) return;
-    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(z("properties"))) {
+    if (this.hasOwnProperty(U("finalized"))) return;
+    if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(U("properties"))) {
       const e = this.properties, s = [...Bt(e), ...Wt(e)];
       for (const n of s) this.createProperty(n, e[n]);
     }
@@ -281,14 +281,14 @@ let T = class extends HTMLElement {
   firstUpdated(t) {
   }
 };
-T.elementStyles = [], T.shadowRootOptions = { mode: "open" }, T[z("elementProperties")] = /* @__PURE__ */ new Map(), T[z("finalized")] = /* @__PURE__ */ new Map(), W == null || W({ ReactiveElement: T }), (_.reactiveElementVersions ?? (_.reactiveElementVersions = [])).push("2.1.2");
+T.elementStyles = [], T.shadowRootOptions = { mode: "open" }, T[U("elementProperties")] = /* @__PURE__ */ new Map(), T[U("finalized")] = /* @__PURE__ */ new Map(), W == null || W({ ReactiveElement: T }), (_.reactiveElementVersions ?? (_.reactiveElementVersions = [])).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
 const P = globalThis, lt = (i) => i, L = P.trustedTypes, ct = L ? L.createPolicy("lit-html", { createHTML: (i) => i }) : void 0, St = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, Ct = "?" + $, qt = `<${Ct}>`, S = document, O = () => S.createComment(""), R = (i) => i === null || typeof i != "object" && typeof i != "function", et = Array.isArray, Vt = (i) => et(i) || typeof (i == null ? void 0 : i[Symbol.iterator]) == "function", K = `[ 	
-\f\r]`, U = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, dt = /-->/g, ht = />/g, x = RegExp(`>|${K}(?:([^\\s"'>=/]+)(${K}*=${K}*(?:[^ 	
+\f\r]`, z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, dt = /-->/g, ht = />/g, x = RegExp(`>|${K}(?:([^\\s"'>=/]+)(${K}*=${K}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), pt = /'/g, ut = /"/g, Nt = /^(?:script|style|textarea|title)$/i, Yt = (i) => (t, ...e) => ({ _$litType$: i, strings: t, values: e }), d = Yt(1), k = Symbol.for("lit-noChange"), c = Symbol.for("lit-nothing"), mt = /* @__PURE__ */ new WeakMap(), v = S.createTreeWalker(S, 129);
 function Tt(i, t) {
   if (!et(i) || !i.hasOwnProperty("raw")) throw Error("invalid template strings array");
@@ -296,13 +296,13 @@ function Tt(i, t) {
 }
 const Jt = (i, t) => {
   const e = i.length - 1, s = [];
-  let n, r = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", a = U;
+  let n, r = t === 2 ? "<svg>" : t === 3 ? "<math>" : "", a = z;
   for (let l = 0; l < e; l++) {
     const o = i[l];
     let p, u, h = -1, m = 0;
-    for (; m < o.length && (a.lastIndex = m, u = a.exec(o), u !== null); ) m = a.lastIndex, a === U ? u[1] === "!--" ? a = dt : u[1] !== void 0 ? a = ht : u[2] !== void 0 ? (Nt.test(u[2]) && (n = RegExp("</" + u[2], "g")), a = x) : u[3] !== void 0 && (a = x) : a === x ? u[0] === ">" ? (a = n ?? U, h = -1) : u[1] === void 0 ? h = -2 : (h = a.lastIndex - u[2].length, p = u[1], a = u[3] === void 0 ? x : u[3] === '"' ? ut : pt) : a === ut || a === pt ? a = x : a === dt || a === ht ? a = U : (a = x, n = void 0);
+    for (; m < o.length && (a.lastIndex = m, u = a.exec(o), u !== null); ) m = a.lastIndex, a === z ? u[1] === "!--" ? a = dt : u[1] !== void 0 ? a = ht : u[2] !== void 0 ? (Nt.test(u[2]) && (n = RegExp("</" + u[2], "g")), a = x) : u[3] !== void 0 && (a = x) : a === x ? u[0] === ">" ? (a = n ?? z, h = -1) : u[1] === void 0 ? h = -2 : (h = a.lastIndex - u[2].length, p = u[1], a = u[3] === void 0 ? x : u[3] === '"' ? ut : pt) : a === ut || a === pt ? a = x : a === dt || a === ht ? a = z : (a = x, n = void 0);
     const f = a === x && i[l + 1].startsWith("/>") ? " " : "";
-    r += a === U ? o + qt : h >= 0 ? (s.push(p), o.slice(0, h) + St + o.slice(h) + $ + f) : o + $ + (h === -2 ? l : f);
+    r += a === z ? o + qt : h >= 0 ? (s.push(p), o.slice(0, h) + St + o.slice(h) + $ + f) : o + $ + (h === -2 ? l : f);
   }
   return [Tt(i, r + (i[e] || "<?>") + (t === 2 ? "</svg>" : t === 3 ? "</math>" : "")), s];
 };
@@ -564,7 +564,7 @@ const ft = [
 function se(i) {
   if (!C(i) || typeof i.enabled != "boolean" || !["idle", "running", "completed", "partial", "failed"].includes(
     String(i.status)
-  ))
+  ) || i.stage !== void 0 && !["downloading", "rendering", "analyzing"].includes(String(i.stage)))
     return !1;
   for (const s of ["stage", "error"])
     if (i[s] !== void 0 && !N(i[s], 100)) return !1;
@@ -867,16 +867,30 @@ y(Y, "properties", {
 }), y(Y, "styles", tt`
     :host {
       display: block;
+      margin: 0 14px 14px;
+      padding-top: 12px;
+      border-top: 1px solid
+        color-mix(in srgb, var(--divider-color) 65%, transparent);
       font-size: 14px;
     }
     .files {
-      margin: 10px 0;
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border: 1px solid
+        color-mix(in srgb, var(--divider-color) 80%, transparent);
+      border-radius: 6px;
+      background: color-mix(
+        in srgb,
+        var(--secondary-background-color, transparent) 70%,
+        transparent
+      );
     }
     .file {
       display: flex;
       align-items: center;
       gap: 8px;
-      border-top: 1px solid var(--divider-color);
+      border-top: 1px solid
+        color-mix(in srgb, var(--divider-color) 70%, transparent);
       padding: 8px 0;
     }
     .name {
@@ -927,12 +941,16 @@ y(Y, "properties", {
     }
     .summary {
       margin-top: 12px;
-      border-top: 1px solid var(--divider-color);
-      padding-top: 8px;
+      padding: 12px;
+      border: 1px solid
+        color-mix(in srgb, var(--primary-color) 22%, var(--divider-color));
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--primary-color) 4%, transparent);
     }
     h4 {
-      margin: 12px 0 4px;
+      margin: 12px 0 5px;
       font-size: 14px;
+      font-weight: 700;
     }
     ul {
       margin: 0;
@@ -1180,7 +1198,10 @@ class Z extends w {
         </span>
       </summary>
       <div class="meta">
-        <span>${r.deadline}: ${vt(t.deadline, this.hass)}</span>
+        <span class="deadline"
+          ><span class="deadline-label">${r.deadline}</span
+          >${vt(t.deadline, this.hass)}</span
+        >
       </div>
       <div class="body">${t.content || r.noBody}</div>
       ${(l = this.hass) != null && l.fetchWithAuth ? d`<hkte-notice-actions .hass=${this.hass} .entityId=${n} .notice=${t} .showAttachments=${((o = this.config) == null ? void 0 : o.show_attachments) !== !1}></hkte-notice-actions>` : c}
@@ -1209,7 +1230,7 @@ class Z extends w {
                     ${l ? d`<h2 class="student-title">
                             ${((it = (st = this.config) == null ? void 0 : st.entity_names) == null ? void 0 : it[g.entityId]) ?? he(g.name, g.entityId)}
                           </h2>` : c}
-                    ${Mt ? d`<div class="hint error">${t.unavailable}</div>` : M.length ? M.map((Ut, zt) => this._notice(Ut, zt, s, g.entityId)) : d`<div class="empty">${t.noNotices}</div>`}${g.hasMore && M.length ? d`<div class="hint">${t.more}</div>` : c}
+                    ${Mt ? d`<div class="hint error">${t.unavailable}</div>` : M.length ? M.map((zt, Ut) => this._notice(zt, Ut, s, g.entityId)) : d`<div class="empty">${t.noNotices}</div>`}${g.hasMore && M.length ? d`<div class="hint">${t.more}</div>` : c}
                   </section>`;
     }) : d`<div class="hint">${t.unavailable}</div>`}
       </div></ha-card
@@ -1247,41 +1268,61 @@ y(Z, "properties", {
       white-space: nowrap;
     }
     .content {
-      padding: 4px 20px 18px;
+      padding: 8px 16px 20px;
     }
     .student {
-      padding-top: 14px;
+      padding-top: 10px;
     }
     .student + .student {
-      border-top: 1px solid var(--divider-color);
-      margin-top: 10px;
+      border-top: 1px solid
+        color-mix(in srgb, var(--divider-color) 70%, transparent);
+      margin-top: 18px;
+      padding-top: 18px;
     }
     .student-title {
-      margin: 0 0 8px;
-      font-size: 0.98rem;
-      font-weight: 600;
+      margin: 0 4px 10px;
+      color: var(--secondary-text-color);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
     }
     details {
-      border-bottom: 1px solid var(--divider-color);
+      margin: 10px 0;
+      overflow: hidden;
+      border: 1px solid
+        color-mix(in srgb, var(--divider-color) 85%, transparent);
+      border-radius: 8px;
+      background: color-mix(
+        in srgb,
+        var(--card-background-color, var(--ha-card-background, transparent)) 92%,
+        var(--primary-color) 8%
+      );
+      box-shadow: 0 1px 2px
+        color-mix(in srgb, var(--primary-text-color) 8%, transparent);
     }
-    details:last-child {
-      border-bottom: 0;
+    details[open] {
+      border-color: color-mix(
+        in srgb,
+        var(--primary-color) 28%,
+        var(--divider-color)
+      );
     }
     summary {
       display: flex;
       align-items: flex-start;
       gap: 8px;
       min-width: 0;
-      padding: 13px 0;
+      padding: 15px 14px;
       cursor: pointer;
       list-style: none;
     }
     .unread-notice summary {
       border-inline-start: 3px solid var(--warning-color, #d89b00);
-      padding-inline-start: 10px;
+      padding-inline-start: 11px;
       background: color-mix(
         in srgb,
-        var(--warning-color, #d89b00) 9%,
+        var(--warning-color, #d89b00) 8%,
         transparent
       );
     }
@@ -1303,7 +1344,9 @@ y(Z, "properties", {
       display: block;
       min-width: 0;
       overflow-wrap: anywhere;
-      font-weight: 550;
+      font-size: 1rem;
+      font-weight: 650;
+      line-height: 1.35;
     }
     .title-content {
       display: block;
@@ -1355,7 +1398,10 @@ y(Z, "properties", {
       stroke-width: 1.8;
     }
     .body {
-      padding: 0 0 14px 20px;
+      margin: 0 14px;
+      padding: 14px 0 16px;
+      border-top: 1px solid
+        color-mix(in srgb, var(--divider-color) 65%, transparent);
       white-space: pre-wrap;
       overflow-wrap: anywhere;
       line-height: 1.55;
@@ -1364,9 +1410,23 @@ y(Z, "properties", {
       display: flex;
       flex-wrap: wrap;
       gap: 6px 14px;
-      padding: 0 0 10px 20px;
+      margin: 0 14px;
+      padding: 12px 0 0;
       color: var(--secondary-text-color);
       font-size: 0.8rem;
+    }
+    .deadline {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 6px;
+      font-weight: 600;
+    }
+    .deadline-label {
+      color: var(--secondary-text-color);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
     .status {
       color: var(--primary-color);
@@ -1375,7 +1435,8 @@ y(Z, "properties", {
       display: flex;
       flex-wrap: wrap;
       gap: 4px 8px;
-      padding: 4px 0 4px 20px;
+      margin: 0 14px;
+      padding: 4px 0;
       color: var(--secondary-text-color);
       font-size: 0.8rem;
     }
@@ -1401,6 +1462,16 @@ y(Z, "properties", {
         align-items: flex-start;
         flex-direction: column;
         gap: 3px;
+      }
+      .content {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+      summary {
+        padding: 13px 11px;
+      }
+      .title {
+        font-size: 0.94rem;
       }
     }
     @media (prefers-reduced-motion: no-preference) {

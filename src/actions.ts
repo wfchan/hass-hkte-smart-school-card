@@ -107,16 +107,30 @@ export class HkteNoticeActions extends LitElement {
   static styles = css`
     :host {
       display: block;
+      margin: 0 14px 14px;
+      padding-top: 12px;
+      border-top: 1px solid
+        color-mix(in srgb, var(--divider-color) 65%, transparent);
       font-size: 14px;
     }
     .files {
-      margin: 10px 0;
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border: 1px solid
+        color-mix(in srgb, var(--divider-color) 80%, transparent);
+      border-radius: 6px;
+      background: color-mix(
+        in srgb,
+        var(--secondary-background-color, transparent) 70%,
+        transparent
+      );
     }
     .file {
       display: flex;
       align-items: center;
       gap: 8px;
-      border-top: 1px solid var(--divider-color);
+      border-top: 1px solid
+        color-mix(in srgb, var(--divider-color) 70%, transparent);
       padding: 8px 0;
     }
     .name {
@@ -167,12 +181,16 @@ export class HkteNoticeActions extends LitElement {
     }
     .summary {
       margin-top: 12px;
-      border-top: 1px solid var(--divider-color);
-      padding-top: 8px;
+      padding: 12px;
+      border: 1px solid
+        color-mix(in srgb, var(--primary-color) 22%, var(--divider-color));
+      border-radius: 6px;
+      background: color-mix(in srgb, var(--primary-color) 4%, transparent);
     }
     h4 {
-      margin: 12px 0 4px;
+      margin: 12px 0 5px;
       font-size: 14px;
+      font-weight: 700;
     }
     ul {
       margin: 0;
