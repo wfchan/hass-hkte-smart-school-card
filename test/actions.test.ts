@@ -72,7 +72,11 @@ describe("notice actions", () => {
     const element = await mount(fetch);
     expect(fetch).toHaveBeenCalledTimes(1);
     expect(fetch.mock.calls[0][1]).toBeUndefined();
-    element.shadowRoot!.querySelectorAll("button")[1].click();
+    element
+      .shadowRoot!.querySelector<HTMLButtonElement>(
+        'button[aria-label="AI 整理重點"]',
+      )!
+      .click();
     await settle();
     expect(fetch.mock.calls[1][1].method).toBe("POST");
     expect(JSON.parse(fetch.mock.calls[1][1].body)).toEqual({ force: false });
@@ -93,7 +97,11 @@ describe("notice actions", () => {
     expect(element.shadowRoot!.querySelectorAll("h4")).toHaveLength(5);
     expect(element.shadowRoot!.textContent).toContain("未提供");
     fetch.mockResolvedValue(response({ enabled: true, status: "running" }));
-    element.shadowRoot!.querySelectorAll("button")[1].click();
+    element
+      .shadowRoot!.querySelector<HTMLButtonElement>(
+        'button[aria-label="重新分析"]',
+      )!
+      .click();
     await settle();
     expect(JSON.parse(fetch.mock.calls[3][1].body)).toEqual({ force: true });
     element.remove();
@@ -120,11 +128,15 @@ describe("notice actions", () => {
       .mockResolvedValueOnce(response({ enabled: false, status: "idle" }))
       .mockResolvedValueOnce(new Response("%PDF-fixture"));
     const element = await mount(fetch);
-    expect(element.shadowRoot!.querySelectorAll("button")[1].disabled).toBe(
-      true,
-    );
+    expect(
+      element.shadowRoot!.querySelector<HTMLButtonElement>(
+        'button[aria-label="AI 整理重點"]',
+      )!.disabled,
+    ).toBe(true);
     element
-      .shadowRoot!.querySelector<HTMLButtonElement>("button.icon")!
+      .shadowRoot!.querySelector<HTMLButtonElement>(
+        'button[aria-label="下載附件"]',
+      )!
       .click();
     await settle();
     expect(fetch.mock.calls[1][0]).toBe(

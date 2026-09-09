@@ -131,6 +131,12 @@ export class HkteNoticeActions extends LitElement {
       gap: 8px;
       min-height: 40px;
     }
+    .file-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: none;
+    }
     .file {
       display: flex;
       align-items: center;
@@ -375,39 +381,32 @@ export class HkteNoticeActions extends LitElement {
         this.showAttachments
           ? html`<div class="files">
               ${this.notice.attachments.map(
-                (file) =>
+                (file, index) =>
                   html`<div class="file">
                     <div class="name">
                       ${file.filename}
                       <div class="metadata">
-                        ${file.mime_type}${file.size !== null ? ` · ${Math.round(file.size / 1024)} KB` : ""}
+                        ${file.size !== null ? `${Math.round(file.size / 1024)} KB` : nothing}
                       </div>
                     </div>
-                    <button
-                      class="icon"
-                      title=${this.text("下載附件", "Download attachment")}
-                      aria-label=${this.text("下載附件", "Download attachment")}
-                      ?disabled=${!file.id || !this.hass?.fetchWithAuth || this.downloads.has(file.id)}
-                      @click=${() => this.download(file)}
-                    >
-                      <ha-icon icon="mdi:download"></ha-icon>
-                    </button>
+                    <div class="file-actions">
+                      ${index === 0 ? this.analyzeButton(state, busy) : nothing}
+                      <button
+                        class="icon"
+                        title=${this.text("下載附件", "Download attachment")}
+                        aria-label=${this.text("下載附件", "Download attachment")}
+                        ?disabled=${!file.id || !this.hass?.fetchWithAuth || this.downloads.has(file.id)}
+                        @click=${() => this.download(file)}
+                      >
+                        <ha-icon icon="mdi:download"></ha-icon>
+                      </button>
+                    </div>
                   </div>`,
               )}
             </div>`
           : nothing
       }
-      <div class="action-row">
-        <button
-          class="icon"
-          title=${state?.summary ? this.text("重新分析", "Analyze again") : this.text("AI 整理重點", "AI summary")}
-          aria-label=${state?.summary ? this.text("重新分析", "Analyze again") : this.text("AI 整理重點", "AI summary")}
-          ?disabled=${busy || !state?.enabled}
-          @click=${() => this.start()}
-        >
-          <ha-icon icon="mdi:text-box-search-outline"></ha-icon>
-        </button>
-      </div>
+      ${this.notice.attachments.length === 0 ? this.analyzeButton(state, busy) : nothing}
       ${state && !state.enabled ? html`<p class="progress">${this.message("ai_not_configured")}</p>` : nothing}
       ${busy ? html`<p class="progress" role="status">${stage} (${state?.processed ?? 0}/${this.notice.attachments.length})</p>` : nothing}
       ${
@@ -446,6 +445,21 @@ export class HkteNoticeActions extends LitElement {
           : nothing
       }
     `;
+  }
+
+  private analyzeButton(state: AnalysisState | undefined, busy: boolean) {
+    const label = state?.summary
+      ? this.text("重新分析", "Analyze again")
+      : this.text("AI 整理重點", "AI summary");
+    return html`<button
+      class="icon"
+      title=${label}
+      aria-label=${label}
+      ?disabled=${busy || !state?.enabled}
+      @click=${() => this.start()}
+    >
+      <ha-icon icon="mdi:text-box-search-outline"></ha-icon>
+    </button>`;
   }
 }
 
