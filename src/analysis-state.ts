@@ -41,6 +41,11 @@ function validState(value: unknown): value is AnalysisState {
     )
   )
     return false;
+  if (
+    value.stage !== undefined &&
+    !["downloading", "rendering", "analyzing"].includes(String(value.stage))
+  )
+    return false;
   for (const key of ["stage", "error"])
     if (value[key] !== undefined && !boundedText(value[key], 100)) return false;
   if (value.stale !== undefined && typeof value.stale !== "boolean")

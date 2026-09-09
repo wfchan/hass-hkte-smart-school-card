@@ -30,6 +30,7 @@ describe("analysis response contract", () => {
     { ...valid(), summary: { ...valid().summary, dates: "invalid" } },
     { ...valid(), summary: { ...valid().summary, extra: [] } },
     { ...valid(), processed: -1 },
+    { ...valid(), stage: "provider_secret" },
     { ...valid(), error: {} },
     {
       ...valid(),
