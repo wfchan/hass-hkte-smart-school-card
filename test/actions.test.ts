@@ -38,12 +38,12 @@ afterEach(() => {
 
 describe("notice actions", () => {
   it.each([
-    ["completed", false, "2026年9月11日"],
-    ["completed", true, "請重新分析取得截止日期"],
-    ["partial", false, "分析未完整，待確認"],
-    ["running", false, "AI 分析中"],
+    ["completed", false, "2026年9月17日"],
+    ["completed", true, "2026年9月17日"],
+    ["partial", false, "2026年9月17日"],
+    ["running", false, "2026年9月17日"],
   ])(
-    "renders only a trusted AI deadline: %s stale=%s",
+    "system reply deadline wins regardless of AI state: %s stale=%s",
     async (status, stale, expected) => {
       const fetch = vi.fn().mockResolvedValue(
         response({
@@ -70,16 +70,18 @@ describe("notice actions", () => {
       const text =
         element.shadowRoot!.querySelector(".deadline-value")!.textContent;
       expect(text).toContain(expected);
-      expect(text).not.toContain("23:59");
-      expect(text).not.toContain("17");
+      expect(text).not.toContain("9月11日");
+      expect(
+        element.shadowRoot!.querySelector(".deadline-label")!.textContent,
+      ).toBe("HKTE 系統回覆限期");
     },
   );
 
   it.each([
-    [null, "未找到明確截止日期"],
-    [undefined, "請重新分析取得截止日期"],
+    [null, "2026年9月17日"],
+    [undefined, "2026年9月17日"],
   ])(
-    "distinguishes absent legacy field from no deadline",
+    "system deadline does not depend on AI or legacy deadline fields",
     async (deadline, expected) => {
       const element = await mount(
         vi.fn().mockResolvedValue(

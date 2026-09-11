@@ -1,6 +1,6 @@
 import { LitElement, css, html, nothing } from "lit";
 import "./actions";
-import { aiDeadline } from "./deadline";
+import { systemDeadline } from "./deadline";
 import { clampDays, clampLimit, discoverFeeds, visibleNotices } from "./data";
 import type {
   ExpandedMode,
@@ -504,7 +504,7 @@ export class HkteNoticesCard extends LitElement {
                 ${notice.content || text.noBody}
               </div></hkte-notice-actions
             >`
-          : html`${aiDeadline(undefined, this.hass)}
+          : html`${systemDeadline(notice.deadline, this.hass)}
               <div class="body">${notice.content || text.noBody}</div>`
       }
       ${notice.content_truncated ? html`<div class="hint">${text.truncated}</div>` : nothing}${

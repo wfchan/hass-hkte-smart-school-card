@@ -85,11 +85,11 @@ describe("card", () => {
     const badge = card.shadowRoot?.querySelector(".read-status");
     expect(card.shadowRoot?.querySelector(".deadline-icon svg")).not.toBeNull();
     expect(card.shadowRoot?.querySelector(".deadline-label")?.textContent).toBe(
-      "AI deadline",
+      "HKTE reply deadline",
     );
     expect(
       card.shadowRoot?.querySelector(".deadline-value")?.textContent,
-    ).toContain("Awaiting AI analysis");
+    ).toContain("Sep 10, 2026");
     expect(badge?.getAttribute("aria-label")).toBe("Read");
     expect(badge?.querySelector("svg")).not.toBeNull();
     const replied = card.shadowRoot?.querySelector(".replied-status");

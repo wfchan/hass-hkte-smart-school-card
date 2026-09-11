@@ -1,5 +1,5 @@
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
-import { aiDeadline, deadlineStyles } from "./deadline";
+import { systemDeadline, deadlineStyles } from "./deadline";
 import type { HomeAssistant, Notice, NoticeAttachment } from "./types";
 import {
   parseAnalysisState,
@@ -388,7 +388,7 @@ export class HkteNoticeActions extends LitElement {
           ? this.text("處理附件頁面", "Rendering pages")
           : this.text("取得附件", "Fetching attachments");
     return html`
-      ${aiDeadline(state, this.hass)}
+      ${systemDeadline(this.notice.deadline, this.hass)}
       <div class="body-row">
         <slot name="body"></slot>
         ${!this.showAttachments || this.notice.attachments.length === 0 ? this.analyzeButton(state, busy) : nothing}

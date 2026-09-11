@@ -1,5 +1,4 @@
 import { css, html } from "lit";
-import type { AnalysisState } from "./analysis-state";
 import type { HomeAssistant } from "./types";
 
 export const deadlineStyles = css`
@@ -43,46 +42,21 @@ export const deadlineStyles = css`
   }
 `;
 
-export function aiDeadline(
-  state: AnalysisState | undefined,
-  hass?: HomeAssistant,
-) {
+export function systemDeadline(deadline: string | null, hass?: HomeAssistant) {
   const language = hass?.locale?.language ?? hass?.config?.language ?? "en";
   const zh = language.startsWith("zh");
-  let label = zh ? "AI 截止日期" : "AI deadline";
-  let value = zh ? "待 AI 分析" : "Awaiting AI analysis";
-  if (state?.status === "running") value = zh ? "AI 分析中" : "Analyzing";
-  else if (
-    state?.stale ||
-    (state?.summary && state.primary_deadline === undefined)
-  )
-    value = zh ? "請重新分析取得截止日期" : "Analyze again to extract deadline";
-  else if (state?.status === "failed")
-    value = zh ? "分析失敗，請重試" : "Analysis failed; retry";
-  else if (state?.status === "partial")
-    value = zh ? "分析未完整，待確認" : "Partial analysis; confirmation needed";
-  else if (state?.status === "completed") {
-    const deadline = state.primary_deadline;
-    if (deadline) {
-      label =
-        deadline.kind === "reply"
-          ? zh
-            ? "AI 回覆期限"
-            : "AI reply deadline"
-          : zh
-            ? "AI 交件期限"
-            : "AI submission deadline";
-      const timed = deadline.time !== null;
-      // A date-only deadline is a calendar date, never an invented end-of-day time.
-      const instant = new Date(
-        `${deadline.date}T${deadline.time ?? "00:00"}:00${timed ? "+08:00" : "Z"}`,
-      );
+  const label = zh ? "HKTE 系統回覆限期" : "HKTE reply deadline";
+  let value = zh ? "HKTE 未提供回覆限期" : "No HKTE reply deadline provided";
+  if (deadline) {
+    const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test(deadline);
+    const instant = new Date(dateOnly ? `${deadline}T00:00:00Z` : deadline);
+    if (Number.isFinite(instant.getTime())) {
       value = new Intl.DateTimeFormat(language, {
         dateStyle: "medium",
-        ...(timed ? { timeStyle: "short" as const } : {}),
-        timeZone: timed ? "Asia/Hong_Kong" : "UTC",
+        ...(dateOnly ? {} : { timeStyle: "short" as const }),
+        timeZone: dateOnly ? "UTC" : "Asia/Hong_Kong",
       }).format(instant);
-    } else value = zh ? "未找到明確截止日期" : "No explicit deadline found";
+    }
   }
   return html`<div class="meta">
     <span class="deadline">
