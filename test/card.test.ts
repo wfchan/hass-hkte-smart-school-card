@@ -87,7 +87,7 @@ describe("card", () => {
       card.shadowRoot?.querySelector(".deadline-icon")?.getAttribute("icon"),
     ).toBe("mdi:calendar-clock");
     expect(card.shadowRoot?.querySelector(".deadline-label")?.textContent).toBe(
-      "Deadline",
+      "HKTE system deadline",
     );
     expect(
       card.shadowRoot?.querySelector(".deadline-value")?.textContent,

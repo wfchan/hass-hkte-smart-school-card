@@ -6,7 +6,7 @@ var y = (i, t, e) => Ot(i, typeof t != "symbol" ? t + "" : t, e);
  * Copyright 2019 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const D = globalThis, X = D.ShadowRoot && (D.ShadyCSS === void 0 || D.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Q = Symbol(), nt = /* @__PURE__ */ new WeakMap();
+const B = globalThis, X = B.ShadowRoot && (B.ShadyCSS === void 0 || B.ShadyCSS.nativeShadow) && "adoptedStyleSheets" in Document.prototype && "replace" in CSSStyleSheet.prototype, Q = Symbol(), nt = /* @__PURE__ */ new WeakMap();
 let At = class {
   constructor(t, e, s) {
     if (this._$cssResult$ = !0, s !== Q) throw Error("CSSResult is not constructable. Use `unsafeCSS` or `css` instead.");
@@ -35,7 +35,7 @@ const Rt = (i) => new At(typeof i == "string" ? i : i + "", void 0, Q), tt = (i,
 }, Ht = (i, t) => {
   if (X) i.adoptedStyleSheets = t.map((e) => e instanceof CSSStyleSheet ? e : e.styleSheet);
   else for (const e of t) {
-    const s = document.createElement("style"), n = D.litNonce;
+    const s = document.createElement("style"), n = B.litNonce;
     n !== void 0 && s.setAttribute("nonce", n), s.textContent = e.cssText, i.appendChild(s);
   }
 }, rt = X ? (i) => i : (i) => i instanceof CSSStyleSheet ? ((t) => {
@@ -48,7 +48,7 @@ const Rt = (i) => new At(typeof i == "string" ? i : i + "", void 0, Q), tt = (i,
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const { is: jt, defineProperty: Dt, getOwnPropertyDescriptor: Bt, getOwnPropertyNames: Lt, getOwnPropertySymbols: Wt, getPrototypeOf: Kt } = Object, _ = globalThis, at = _.trustedTypes, Ft = at ? at.emptyScript : "", W = _.reactiveElementPolyfillSupport, U = (i, t) => i, V = { toAttribute(i, t) {
+const { is: jt, defineProperty: Bt, getOwnPropertyDescriptor: Dt, getOwnPropertyNames: Lt, getOwnPropertySymbols: Kt, getPrototypeOf: Wt } = Object, _ = globalThis, at = _.trustedTypes, Ft = at ? at.emptyScript : "", K = _.reactiveElementPolyfillSupport, U = (i, t) => i, V = { toAttribute(i, t) {
   switch (t) {
     case Boolean:
       i = i ? Ft : null;
@@ -88,11 +88,11 @@ let N = class extends HTMLElement {
   static createProperty(t, e = ot) {
     if (e.state && (e.attribute = !1), this._$Ei(), this.prototype.hasOwnProperty(t) && ((e = Object.create(e)).wrapped = !0), this.elementProperties.set(t, e), !e.noAccessor) {
       const s = Symbol(), n = this.getPropertyDescriptor(t, s, e);
-      n !== void 0 && Dt(this.prototype, t, n);
+      n !== void 0 && Bt(this.prototype, t, n);
     }
   }
   static getPropertyDescriptor(t, e, s) {
-    const { get: n, set: r } = Bt(this.prototype, t) ?? { get() {
+    const { get: n, set: r } = Dt(this.prototype, t) ?? { get() {
       return this[e];
     }, set(a) {
       this[e] = a;
@@ -107,13 +107,13 @@ let N = class extends HTMLElement {
   }
   static _$Ei() {
     if (this.hasOwnProperty(U("elementProperties"))) return;
-    const t = Kt(this);
+    const t = Wt(this);
     t.finalize(), t.l !== void 0 && (this.l = [...t.l]), this.elementProperties = new Map(t.elementProperties);
   }
   static finalize() {
     if (this.hasOwnProperty(U("finalized"))) return;
     if (this.finalized = !0, this._$Ei(), this.hasOwnProperty(U("properties"))) {
-      const e = this.properties, s = [...Lt(e), ...Wt(e)];
+      const e = this.properties, s = [...Lt(e), ...Kt(e)];
       for (const n of s) this.createProperty(n, e[n]);
     }
     const t = this[Symbol.metadata];
@@ -281,14 +281,14 @@ let N = class extends HTMLElement {
   firstUpdated(t) {
   }
 };
-N.elementStyles = [], N.shadowRootOptions = { mode: "open" }, N[U("elementProperties")] = /* @__PURE__ */ new Map(), N[U("finalized")] = /* @__PURE__ */ new Map(), W == null || W({ ReactiveElement: N }), (_.reactiveElementVersions ?? (_.reactiveElementVersions = [])).push("2.1.2");
+N.elementStyles = [], N.shadowRootOptions = { mode: "open" }, N[U("elementProperties")] = /* @__PURE__ */ new Map(), N[U("finalized")] = /* @__PURE__ */ new Map(), K == null || K({ ReactiveElement: N }), (_.reactiveElementVersions ?? (_.reactiveElementVersions = [])).push("2.1.2");
 /**
  * @license
  * Copyright 2017 Google LLC
  * SPDX-License-Identifier: BSD-3-Clause
  */
-const P = globalThis, lt = (i) => i, B = P.trustedTypes, ct = B ? B.createPolicy("lit-html", { createHTML: (i) => i }) : void 0, St = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, Ct = "?" + $, qt = `<${Ct}>`, S = document, O = () => S.createComment(""), R = (i) => i === null || typeof i != "object" && typeof i != "function", et = Array.isArray, Vt = (i) => et(i) || typeof (i == null ? void 0 : i[Symbol.iterator]) == "function", K = `[ 	
-\f\r]`, z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, dt = /-->/g, ht = />/g, x = RegExp(`>|${K}(?:([^\\s"'>=/]+)(${K}*=${K}*(?:[^ 	
+const P = globalThis, lt = (i) => i, D = P.trustedTypes, ct = D ? D.createPolicy("lit-html", { createHTML: (i) => i }) : void 0, St = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, Ct = "?" + $, qt = `<${Ct}>`, S = document, O = () => S.createComment(""), R = (i) => i === null || typeof i != "object" && typeof i != "function", et = Array.isArray, Vt = (i) => et(i) || typeof (i == null ? void 0 : i[Symbol.iterator]) == "function", W = `[ 	
+\f\r]`, z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, dt = /-->/g, ht = />/g, x = RegExp(`>|${W}(?:([^\\s"'>=/]+)(${W}*=${W}*(?:[^ 	
 \f\r"'\`<>=]|("|')|))|$)`, "g"), pt = /'/g, ut = /"/g, kt = /^(?:script|style|textarea|title)$/i, Yt = (i) => (t, ...e) => ({ _$litType$: i, strings: t, values: e }), c = Yt(1), T = Symbol.for("lit-noChange"), d = Symbol.for("lit-nothing"), mt = /* @__PURE__ */ new WeakMap(), v = S.createTreeWalker(S, 129);
 function Nt(i, t) {
   if (!et(i) || !i.hasOwnProperty("raw")) throw Error("invalid template strings array");
@@ -325,7 +325,7 @@ class H {
         if (kt.test(n.tagName)) {
           const p = n.textContent.split($), m = p.length - 1;
           if (m > 0) {
-            n.textContent = B ? B.emptyScript : "";
+            n.textContent = D ? D.emptyScript : "";
             for (let f = 0; f < m; f++) n.append(p[f], O()), v.nextNode(), o.push({ type: 2, index: ++r });
             n.append(p[m], O());
           }
@@ -1073,7 +1073,7 @@ const xt = {
     unread: "未讀",
     read: "已讀",
     issued: "發出",
-    deadline: "截止",
+    deadline: "HKTE 系統截止時間",
     replied: "已回覆",
     noReply: "未回覆",
     noBody: "此通告未提供文字正文。",
@@ -1090,7 +1090,7 @@ const xt = {
     unread: "Unread",
     read: "Read",
     issued: "Issued",
-    deadline: "Deadline",
+    deadline: "HKTE system deadline",
     replied: "Replied",
     noReply: "Not replied",
     noBody: "This notice has no text content.",

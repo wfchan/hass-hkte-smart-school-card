@@ -18,6 +18,10 @@ Read-only Lovelace card for the [HKTE Smart School Home Assistant integration](h
 
 ### AI 摘要
 
+「HKTE 系統截止時間」來自整合的通告資料，可能與附件原文不同。搭配整合 v0.4.7 或更新版本重新分析時，AI 會收到這個欄位，並被要求指出來源之間的日期衝突。
+
+The HKTE system deadline comes from the integration and may differ from the attachment. With integration v0.4.7 or later, reanalysis includes this field and instructs the model to flag conflicting dates from different sources.
+
 按「AI 整理重點」才會開始分析；「重新分析」會明確取代現有結果。摘要包含內容重點、重要日期、費用、家長待辦及需確認事項，不顯示附件檔名或頁碼引用。處理進度、部分完成、錯誤重試及未提供欄目都會清楚顯示。
 
 目前只測試及支援 **MiniMax-M3**，其他 OpenAI-compatible model 尚未測試。每次分析最多 10 個附件、40 MiB 及 20 頁；摘要保留 30 天，來源改變時會標示需要重新分析。AI 設定在整合選項中完成，卡片設定不會儲存 API key。

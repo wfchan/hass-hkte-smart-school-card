@@ -1,6 +1,6 @@
 {
   "name": "hass-hkte-smart-school-card",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "A read-only Lovelace card for HKTE Smart School notices",
   "private": true,
   "type": "module",
