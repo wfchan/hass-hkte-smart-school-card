@@ -18,9 +18,9 @@ Read-only Lovelace card for the [HKTE Smart School Home Assistant integration](h
 
 ### AI 摘要
 
-「HKTE 系統截止時間」來自整合的通告資料，可能與附件原文不同。搭配整合 v0.4.7 或更新版本重新分析時，AI 會收到這個欄位，並被要求指出來源之間的日期衝突。
+卡片的截止日期只來自 AI 對通告正文及附件的分析（需要整合 v0.4.8 或更新版本）：優先顯示明確的回覆期限，其次為交件期限，不使用 HKTE 系統或活動日期。只有日期時不會補上時間。未分析、分析不完整及舊摘要缺少日期欄位時會顯示提示；請重新分析舊摘要以取得截止日期。
 
-The HKTE system deadline comes from the integration and may differ from the attachment. With integration v0.4.7 or later, reanalysis includes this field and instructs the model to flag conflicting dates from different sources.
+The card deadline comes only from AI analysis of the notice body and attachments (requires integration v0.4.8 or later). An explicit reply deadline takes priority, followed by a submission deadline; HKTE system and event dates are excluded. Date-only deadlines have no invented time. Pending, incomplete and legacy analyses show a status instead. Analyze an older summary again to extract its deadline.
 
 按「AI 整理重點」才會開始分析；「重新分析」會明確取代現有結果。摘要包含內容重點、重要日期、費用、家長待辦及需確認事項，不顯示附件檔名或頁碼引用。處理進度、部分完成、錯誤重試及未提供欄目都會清楚顯示。
 

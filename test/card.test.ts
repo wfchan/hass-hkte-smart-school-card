@@ -83,15 +83,13 @@ describe("card", () => {
     document.body.append(card);
     await card.updateComplete;
     const badge = card.shadowRoot?.querySelector(".read-status");
-    expect(
-      card.shadowRoot?.querySelector(".deadline-icon")?.getAttribute("icon"),
-    ).toBe("mdi:calendar-clock");
+    expect(card.shadowRoot?.querySelector(".deadline-icon svg")).not.toBeNull();
     expect(card.shadowRoot?.querySelector(".deadline-label")?.textContent).toBe(
-      "HKTE system deadline",
+      "AI deadline",
     );
     expect(
       card.shadowRoot?.querySelector(".deadline-value")?.textContent,
-    ).toContain("2026");
+    ).toContain("Awaiting AI analysis");
     expect(badge?.getAttribute("aria-label")).toBe("Read");
     expect(badge?.querySelector("svg")).not.toBeNull();
     const replied = card.shadowRoot?.querySelector(".replied-status");

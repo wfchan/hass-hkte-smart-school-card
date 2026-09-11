@@ -7,7 +7,7 @@ const notice: Notice = {
   title: "Sample",
   content: "Body",
   issued_at: null,
-  deadline: null,
+  deadline: "2026-09-17T23:59:00+08:00",
   unread: true,
   replied: false,
   content_truncated: false,
@@ -37,6 +37,73 @@ afterEach(() => {
 });
 
 describe("notice actions", () => {
+  it.each([
+    ["completed", false, "2026年9月11日"],
+    ["completed", true, "請重新分析取得截止日期"],
+    ["partial", false, "分析未完整，待確認"],
+    ["running", false, "AI 分析中"],
+  ])(
+    "renders only a trusted AI deadline: %s stale=%s",
+    async (status, stale, expected) => {
+      const fetch = vi.fn().mockResolvedValue(
+        response({
+          enabled: true,
+          status,
+          stale,
+          primary_deadline: {
+            date: "2026-09-11",
+            time: null,
+            kind: "reply",
+            sources: [{ attachment_id: "a1", page: 1 }],
+          },
+          summary: {
+            highlights: [{ text: "Example", sources: [] }],
+            dates: [],
+            costs: [],
+            actions: [],
+            questions: [],
+          },
+          sources: [{ attachment_id: "a1", filename: "sample.pdf", page: 1 }],
+        }),
+      );
+      const element = await mount(fetch);
+      const text =
+        element.shadowRoot!.querySelector(".deadline-value")!.textContent;
+      expect(text).toContain(expected);
+      expect(text).not.toContain("23:59");
+      expect(text).not.toContain("17");
+    },
+  );
+
+  it.each([
+    [null, "未找到明確截止日期"],
+    [undefined, "請重新分析取得截止日期"],
+  ])(
+    "distinguishes absent legacy field from no deadline",
+    async (deadline, expected) => {
+      const element = await mount(
+        vi.fn().mockResolvedValue(
+          response({
+            enabled: true,
+            status: "completed",
+            primary_deadline: deadline,
+            summary: {
+              highlights: [{ text: "Example", sources: [] }],
+              dates: [],
+              costs: [],
+              actions: [],
+              questions: [],
+            },
+            sources: [],
+          }),
+        ),
+      );
+      expect(
+        element.shadowRoot!.querySelector(".deadline-value")!.textContent,
+      ).toContain(expected);
+    },
+  );
+
   it("can refresh a stale summary with attachment rows hidden", async () => {
     const fetch = vi.fn().mockResolvedValue(
       response({

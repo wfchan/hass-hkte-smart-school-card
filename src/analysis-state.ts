@@ -15,6 +15,12 @@ interface SummaryItem {
   text: string;
   sources: Omit<Source, "filename">[];
 }
+export interface AiDeadline {
+  date: string;
+  time: string | null;
+  kind: "reply" | "submission";
+  sources: Omit<Source, "filename">[];
+}
 export interface AnalysisState {
   enabled: boolean;
   status: "idle" | "running" | "completed" | "partial" | "failed";
@@ -22,6 +28,7 @@ export interface AnalysisState {
   processed?: number;
   error?: string;
   stale?: boolean;
+  primary_deadline?: AiDeadline | null;
   summary?: Record<(typeof SUMMARY_SECTIONS)[number], SummaryItem[]>;
   sources?: Source[];
   missing?: { filename: string; error: string }[];
@@ -85,7 +92,10 @@ function validState(value: unknown): value is AnalysisState {
   )
     return false;
   if (value.summary === undefined)
-    return !["completed", "partial"].includes(String(value.status));
+    return (
+      value.primary_deadline == null &&
+      !["completed", "partial"].includes(String(value.status))
+    );
   if (
     !record(value.summary) ||
     Object.keys(value.summary).length !== SUMMARY_SECTIONS.length ||
@@ -93,6 +103,35 @@ function validState(value: unknown): value is AnalysisState {
   )
     return false;
   const sources = value.sources;
+  if (value.primary_deadline !== undefined && value.primary_deadline !== null) {
+    const d = value.primary_deadline;
+    if (
+      !record(d) ||
+      Object.keys(d).length !== 4 ||
+      typeof d.date !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(d.date) ||
+      !Number.isFinite(Date.parse(d.date)) ||
+      new Date(d.date).toISOString().slice(0, 10) !== d.date ||
+      (d.time !== null &&
+        (typeof d.time !== "string" ||
+          !/^([01]\d|2[0-3]):[0-5]\d$/.test(d.time))) ||
+      !["reply", "submission"].includes(String(d.kind)) ||
+      !Array.isArray(d.sources) ||
+      d.sources.length === 0 ||
+      d.sources.length > 20 ||
+      !d.sources.every(
+        (ref) =>
+          record(ref) &&
+          Object.keys(ref).length === 2 &&
+          typeof ref.attachment_id === "string" &&
+          Number.isInteger(ref.page) &&
+          sources.some(
+            (s) => s.attachment_id === ref.attachment_id && s.page === ref.page,
+          ),
+      )
+    )
+      return false;
+  }
   let characters = 0;
   for (const key of SUMMARY_SECTIONS) {
     const items = value.summary[key];

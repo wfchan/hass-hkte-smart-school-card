@@ -17,6 +17,35 @@ const valid = () => ({
 });
 
 describe("analysis response contract", () => {
+  it.each([
+    { date: "2026-02-30" },
+    { time: "24:00" },
+    { kind: "event" },
+    { sources: [] },
+    { sources: [{ attachment_id: "wrong", page: 1 }] },
+  ])("rejects malformed AI deadlines: %j", (change) => {
+    expect(() =>
+      parseAnalysisState({
+        ...valid(),
+        primary_deadline: {
+          date: "2026-09-11",
+          time: null,
+          kind: "reply",
+          sources: [{ attachment_id: "a1", page: 1 }],
+          ...change,
+        },
+      }),
+    ).toThrow("invalid_ai_response");
+  });
+  it("rejects a deadline without a summary", () => {
+    expect(() =>
+      parseAnalysisState({
+        enabled: true,
+        status: "idle",
+        primary_deadline: { date: "2026-09-11" },
+      }),
+    ).toThrow("invalid_ai_response");
+  });
   it("accepts the fixed five-section contract", () => {
     expect(parseAnalysisState(valid())).toEqual(valid());
   });

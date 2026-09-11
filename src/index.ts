@@ -1,5 +1,6 @@
 import { LitElement, css, html, nothing } from "lit";
 import "./actions";
+import { aiDeadline } from "./deadline";
 import { clampDays, clampLimit, discoverFeeds, visibleNotices } from "./data";
 import type {
   ExpandedMode,
@@ -15,7 +16,6 @@ const LABELS = {
     unread: "未讀",
     read: "已讀",
     issued: "發出",
-    deadline: "HKTE 系統截止時間",
     replied: "已回覆",
     noReply: "未回覆",
     noBody: "此通告未提供文字正文。",
@@ -32,7 +32,6 @@ const LABELS = {
     unread: "Unread",
     read: "Read",
     issued: "Issued",
-    deadline: "HKTE system deadline",
     replied: "Replied",
     noReply: "Not replied",
     noBody: "This notice has no text content.",
@@ -103,15 +102,6 @@ function repliedIcon() {
   return html`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <circle cx="12" cy="12" r="9" />
     <path d="m8 12 2.5 2.5L16 9" />
-  </svg>`;
-}
-
-function deadlineIcon() {
-  return html`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <rect x="3" y="4.5" width="13" height="16" rx="2" />
-    <path d="M7 2.5v4M12 2.5v4M3 9h13" />
-    <circle cx="17.5" cy="16.5" r="4" />
-    <path d="M17.5 14.5v2.3l1.5 1" />
   </svg>`;
 }
 
@@ -503,21 +493,20 @@ export class HkteNoticesCard extends LitElement {
           }
         </span>
       </summary>
-      <div class="meta">
-        <span class="deadline">
-          <span
-            class="deadline-icon"
-            icon="mdi:calendar-clock"
-            data-icon="mdi:calendar-clock"
-            >${deadlineIcon()}</span
-          >
-          <span class="deadline-label">${text.deadline}</span>
-          <span class="deadline-value"
-            >${formatDate(notice.deadline, this.hass)}</span
-          >
-        </span>
-      </div>
-      ${this.hass?.fetchWithAuth ? html`<hkte-notice-actions .hass=${this.hass} .entityId=${entityId} .notice=${notice} .showAttachments=${this.config?.show_attachments !== false}><div class="body" slot="body">${notice.content || text.noBody}</div></hkte-notice-actions>` : html`<div class="body">${notice.content || text.noBody}</div>`}
+      ${
+        this.hass?.fetchWithAuth
+          ? html`<hkte-notice-actions
+              .hass=${this.hass}
+              .entityId=${entityId}
+              .notice=${notice}
+              .showAttachments=${this.config?.show_attachments !== false}
+              ><div class="body" slot="body">
+                ${notice.content || text.noBody}
+              </div></hkte-notice-actions
+            >`
+          : html`${aiDeadline(undefined, this.hass)}
+              <div class="body">${notice.content || text.noBody}</div>`
+      }
       ${notice.content_truncated ? html`<div class="hint">${text.truncated}</div>` : nothing}${
         !this.hass?.fetchWithAuth &&
         this.config?.show_attachments &&

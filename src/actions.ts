@@ -1,4 +1,5 @@
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
+import { aiDeadline, deadlineStyles } from "./deadline";
 import type { HomeAssistant, Notice, NoticeAttachment } from "./types";
 import {
   parseAnalysisState,
@@ -104,127 +105,130 @@ export class HkteNoticeActions extends LitElement {
     downloads: { state: true },
     submitting: { state: true },
   };
-  static styles = css`
-    :host {
-      display: block;
-      margin: 0 14px 14px;
-      padding-top: 12px;
-      font-size: 14px;
-    }
-    .files {
-      margin: 0 0 12px;
-      padding: 10px 12px;
-      border: 1px solid
-        color-mix(in srgb, var(--divider-color) 80%, transparent);
-      border-radius: 6px;
-      background: color-mix(
-        in srgb,
-        var(--secondary-background-color, transparent) 70%,
-        transparent
-      );
-    }
-    .body-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: start;
-      gap: 12px;
-      padding: 2px 0 16px;
-    }
-    slot[name="body"] {
-      min-width: 0;
-      align-self: center;
-    }
-    .action-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      min-height: 40px;
-    }
-    .file-actions {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      flex: none;
-    }
-    .file {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 0;
-    }
-    .name {
-      flex: 1;
-      min-width: 0;
-      overflow-wrap: anywhere;
-    }
-    .metadata,
-    .progress {
-      color: var(--secondary-text-color);
-      font-size: 12px;
-      overflow-wrap: anywhere;
-    }
-    button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      min-height: 40px;
-      font: inherit;
-      color: var(--primary-color);
-      background: transparent;
-      border: 1px solid var(--divider-color);
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 6px 10px;
-    }
-    button.icon {
-      width: 40px;
-      height: 40px;
-      flex: 0 0 40px;
-      padding: 8px;
-    }
-    button:disabled {
-      opacity: 0.55;
-      cursor: default;
-    }
-    button:focus-visible {
-      outline: 2px solid var(--primary-color);
-      outline-offset: 2px;
-    }
-    ha-icon {
-      --mdc-icon-size: 20px;
-    }
-    .error {
-      color: var(--error-color);
-    }
-    .summary {
-      margin-top: 12px;
-      padding: 12px;
-      border: 1px solid
-        color-mix(in srgb, var(--primary-color) 22%, var(--divider-color));
-      border-radius: 6px;
-      background: color-mix(in srgb, var(--primary-color) 4%, transparent);
-    }
-    h4 {
-      margin: 12px 0 5px;
-      font-size: 14px;
-      font-weight: 700;
-    }
-    ul {
-      margin: 0;
-      padding-inline-start: 20px;
-    }
-    li {
-      margin: 6px 0;
-      overflow-wrap: anywhere;
-    }
-    .summary-text {
-      white-space: pre-wrap;
-    }
-    .warning {
-      color: var(--warning-color, #a66800);
-    }
-  `;
+  static styles = [
+    deadlineStyles,
+    css`
+      :host {
+        display: block;
+        margin: 0 14px 14px;
+        padding-top: 12px;
+        font-size: 14px;
+      }
+      .files {
+        margin: 0 0 12px;
+        padding: 10px 12px;
+        border: 1px solid
+          color-mix(in srgb, var(--divider-color) 80%, transparent);
+        border-radius: 6px;
+        background: color-mix(
+          in srgb,
+          var(--secondary-background-color, transparent) 70%,
+          transparent
+        );
+      }
+      .body-row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: start;
+        gap: 12px;
+        padding: 2px 0 16px;
+      }
+      slot[name="body"] {
+        min-width: 0;
+        align-self: center;
+      }
+      .action-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-height: 40px;
+      }
+      .file-actions {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        flex: none;
+      }
+      .file {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 0;
+      }
+      .name {
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      .metadata,
+      .progress {
+        color: var(--secondary-text-color);
+        font-size: 12px;
+        overflow-wrap: anywhere;
+      }
+      button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-height: 40px;
+        font: inherit;
+        color: var(--primary-color);
+        background: transparent;
+        border: 1px solid var(--divider-color);
+        border-radius: 4px;
+        cursor: pointer;
+        padding: 6px 10px;
+      }
+      button.icon {
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+        padding: 8px;
+      }
+      button:disabled {
+        opacity: 0.55;
+        cursor: default;
+      }
+      button:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+      }
+      ha-icon {
+        --mdc-icon-size: 20px;
+      }
+      .error {
+        color: var(--error-color);
+      }
+      .summary {
+        margin-top: 12px;
+        padding: 12px;
+        border: 1px solid
+          color-mix(in srgb, var(--primary-color) 22%, var(--divider-color));
+        border-radius: 6px;
+        background: color-mix(in srgb, var(--primary-color) 4%, transparent);
+      }
+      h4 {
+        margin: 12px 0 5px;
+        font-size: 14px;
+        font-weight: 700;
+      }
+      ul {
+        margin: 0;
+        padding-inline-start: 20px;
+      }
+      li {
+        margin: 6px 0;
+        overflow-wrap: anywhere;
+      }
+      .summary-text {
+        white-space: pre-wrap;
+      }
+      .warning {
+        color: var(--warning-color, #a66800);
+      }
+    `,
+  ];
   declare hass?: HomeAssistant;
   declare entityId: string;
   declare notice: Notice;
@@ -384,6 +388,7 @@ export class HkteNoticeActions extends LitElement {
           ? this.text("處理附件頁面", "Rendering pages")
           : this.text("取得附件", "Fetching attachments");
     return html`
+      ${aiDeadline(state, this.hass)}
       <div class="body-row">
         <slot name="body"></slot>
         ${!this.showAttachments || this.notice.attachments.length === 0 ? this.analyzeButton(state, busy) : nothing}
