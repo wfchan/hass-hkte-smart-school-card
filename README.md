@@ -2,6 +2,30 @@
 
 Read-only Lovelace card for the [HKTE Smart School Home Assistant integration](https://github.com/wfchan/hass-hkte-smart-school).
 
+## 繁體中文說明
+
+這是一張唯讀的 Home Assistant Lovelace 卡片，用於顯示 HKTE Smart School 子女通告。卡片不會直接呼叫 HKTE、不會標記通告已讀或回覆；下載及 AI 分析會透過整合提供的、受 Home Assistant 權限保護的端點執行。
+
+### HACS 安裝
+
+上方的 HACS 按鈕可直接開啟卡片安裝頁。也可在 HACS 加入 `https://github.com/wfchan/hass-hkte-smart-school-card` 作為 **Plugin**，安裝 **HKTE Smart School Notices Card**，並在 Home Assistant 資源提示出現時加入產生的 JavaScript resource。建議與 HKTE Smart School 整合一起使用。
+
+### 顯示及設定
+
+不設定 `entities` 時，卡片會自動尋找所有 `notice_content` 感測器；亦可指定一個或多個實體。支援全部/未讀篩選、顯示數量（預設 5）、日期範圍、最新/全部/不展開、子女名稱及附件 metadata。
+
+每份通告會顯示標題、發出日期、已讀/已回覆狀態、截止日期及正文。附件會顯示檔名、MIME 類型及大小，下載按鈕使用整合的驗證端點。正文及 AI 結果會以安全純文字顯示，不載入內嵌連結或媒體。
+
+### AI 摘要
+
+按「AI 整理重點」才會開始分析；「重新分析」會明確取代現有結果。摘要包含內容重點、重要日期、費用、家長待辦及需確認事項，不顯示附件檔名或頁碼引用。處理進度、部分完成、錯誤重試及未提供欄目都會清楚顯示。
+
+目前只測試及支援 **MiniMax-M3**，其他 OpenAI-compatible model 尚未測試。每次分析最多 10 個附件、40 MiB 及 20 頁；摘要保留 30 天，來源改變時會標示需要重新分析。AI 設定在整合選項中完成，卡片設定不會儲存 API key。
+
+### 私隱
+
+只有在你按下分析按鈕（或在整合中啟用新增通告自動分析）時，通告正文及支援的附件頁面才會傳送到你設定的 AI 服務。下載檔案及 API key 不會寫入卡片設定或實體狀態。請在使用前確認 AI 服務的私隱及資料保留政策。
+
 ## Card preview
 
 ![HKTE notices card layout using synthetic sample data](screenshots/card-layout.png)
