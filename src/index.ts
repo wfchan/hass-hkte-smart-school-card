@@ -501,7 +501,12 @@ export class HkteNoticesCard extends LitElement {
       </summary>
       <div class="meta">
         <span class="deadline">
-          <span class="deadline-icon" icon="mdi:calendar-clock" data-icon="mdi:calendar-clock">${deadlineIcon()}</span>
+          <span
+            class="deadline-icon"
+            icon="mdi:calendar-clock"
+            data-icon="mdi:calendar-clock"
+            >${deadlineIcon()}</span
+          >
           <span class="deadline-label">${text.deadline}</span>
           <span class="deadline-value"
             >${formatDate(notice.deadline, this.hass)}</span

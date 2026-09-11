@@ -37,6 +37,52 @@ afterEach(() => {
 });
 
 describe("notice actions", () => {
+  it("can refresh a stale summary with attachment rows hidden", async () => {
+    const fetch = vi.fn().mockResolvedValue(
+      response({
+        enabled: true,
+        status: "completed",
+        stale: true,
+        summary: {
+          highlights: [{ text: "Example", sources: [] }],
+          dates: [],
+          costs: [],
+          actions: [],
+          questions: [],
+        },
+        sources: [],
+      }),
+    );
+    const element = await mount(fetch);
+    element.showAttachments = false;
+    await settle();
+    expect(element.shadowRoot!.querySelector(".file")).toBeNull();
+    const button = element.shadowRoot!.querySelector<HTMLButtonElement>(
+      'button[aria-label="重新分析"]',
+    );
+    expect(button).not.toBeNull();
+    expect(button!.disabled).toBe(false);
+    fetch.mockResolvedValue(
+      response({
+        enabled: true,
+        status: "completed",
+        stale: false,
+        summary: {
+          highlights: [{ text: "Updated", sources: [] }],
+          dates: [],
+          costs: [],
+          actions: [],
+          questions: [],
+        },
+        sources: [],
+      }),
+    );
+    button!.click();
+    await settle();
+    expect(fetch.mock.calls[1][1].method).toBe("POST");
+    expect(JSON.parse(fetch.mock.calls[1][1].body)).toEqual({ force: true });
+    expect(element.shadowRoot!.querySelector(".warning")).toBeNull();
+  });
   it("only reads cached status until explicitly started and polls progress", async () => {
     vi.useFakeTimers();
     const fetch = vi

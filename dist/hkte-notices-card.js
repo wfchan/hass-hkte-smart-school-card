@@ -815,7 +815,7 @@ class Y extends A {
       }
     )}
             </div>` : c}
-      ${this.notice.attachments.length === 0 ? this.analyzeButton(e, s) : c}
+      ${!this.showAttachments || this.notice.attachments.length === 0 ? this.analyzeButton(e, s) : c}
       ${e && !e.enabled ? d`<p class="progress">${this.message("ai_not_configured")}</p>` : c}
       ${s ? d`<p class="progress" role="status">${r} (${(e == null ? void 0 : e.processed) ?? 0}/${this.notice.attachments.length})</p>` : c}
       ${this.error || e != null && e.error ? d`<p class="error" role="alert">
@@ -1216,7 +1216,12 @@ class Z extends A {
       </summary>
       <div class="meta">
         <span class="deadline">
-          <span class="deadline-icon" icon="mdi:calendar-clock" data-icon="mdi:calendar-clock">${ge()}</span>
+          <span
+            class="deadline-icon"
+            icon="mdi:calendar-clock"
+            data-icon="mdi:calendar-clock"
+            >${ge()}</span
+          >
           <span class="deadline-label">${r.deadline}</span>
           <span class="deadline-value"
             >${vt(t.deadline, this.hass)}</span

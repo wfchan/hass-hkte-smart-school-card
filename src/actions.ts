@@ -402,7 +402,7 @@ export class HkteNoticeActions extends LitElement {
             </div>`
           : nothing
       }
-      ${this.notice.attachments.length === 0 ? this.analyzeButton(state, busy) : nothing}
+      ${!this.showAttachments || this.notice.attachments.length === 0 ? this.analyzeButton(state, busy) : nothing}
       ${state && !state.enabled ? html`<p class="progress">${this.message("ai_not_configured")}</p>` : nothing}
       ${busy ? html`<p class="progress" role="status">${stage} (${state?.processed ?? 0}/${this.notice.attachments.length})</p>` : nothing}
       ${
