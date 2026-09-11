@@ -289,7 +289,7 @@ N.elementStyles = [], N.shadowRootOptions = { mode: "open" }, N[U("elementProper
  */
 const P = globalThis, lt = (i) => i, B = P.trustedTypes, ct = B ? B.createPolicy("lit-html", { createHTML: (i) => i }) : void 0, St = "$lit$", $ = `lit$${Math.random().toFixed(9).slice(2)}$`, Ct = "?" + $, qt = `<${Ct}>`, S = document, O = () => S.createComment(""), R = (i) => i === null || typeof i != "object" && typeof i != "function", et = Array.isArray, Vt = (i) => et(i) || typeof (i == null ? void 0 : i[Symbol.iterator]) == "function", K = `[ 	
 \f\r]`, z = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g, dt = /-->/g, ht = />/g, x = RegExp(`>|${K}(?:([^\\s"'>=/]+)(${K}*=${K}*(?:[^ 	
-\f\r"'\`<>=]|("|')|))|$)`, "g"), pt = /'/g, ut = /"/g, kt = /^(?:script|style|textarea|title)$/i, Yt = (i) => (t, ...e) => ({ _$litType$: i, strings: t, values: e }), d = Yt(1), T = Symbol.for("lit-noChange"), c = Symbol.for("lit-nothing"), mt = /* @__PURE__ */ new WeakMap(), v = S.createTreeWalker(S, 129);
+\f\r"'\`<>=]|("|')|))|$)`, "g"), pt = /'/g, ut = /"/g, kt = /^(?:script|style|textarea|title)$/i, Yt = (i) => (t, ...e) => ({ _$litType$: i, strings: t, values: e }), c = Yt(1), T = Symbol.for("lit-noChange"), d = Symbol.for("lit-nothing"), mt = /* @__PURE__ */ new WeakMap(), v = S.createTreeWalker(S, 129);
 function Nt(i, t) {
   if (!et(i) || !i.hasOwnProperty("raw")) throw Error("invalid template strings array");
   return ct !== void 0 ? ct.createHTML(t) : t;
@@ -384,7 +384,7 @@ class j {
     return ((t = this._$AM) == null ? void 0 : t._$AU) ?? this._$Cv;
   }
   constructor(t, e, s, n) {
-    this.type = 2, this._$AH = c, this._$AN = void 0, this._$AA = t, this._$AB = e, this._$AM = s, this.options = n, this._$Cv = (n == null ? void 0 : n.isConnected) ?? !0;
+    this.type = 2, this._$AH = d, this._$AN = void 0, this._$AA = t, this._$AB = e, this._$AM = s, this.options = n, this._$Cv = (n == null ? void 0 : n.isConnected) ?? !0;
   }
   get parentNode() {
     let t = this._$AA.parentNode;
@@ -398,7 +398,7 @@ class j {
     return this._$AB;
   }
   _$AI(t, e = this) {
-    t = I(this, t, e), R(t) ? t === c || t == null || t === "" ? (this._$AH !== c && this._$AR(), this._$AH = c) : t !== this._$AH && t !== T && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : Vt(t) ? this.k(t) : this._(t);
+    t = I(this, t, e), R(t) ? t === d || t == null || t === "" ? (this._$AH !== d && this._$AR(), this._$AH = d) : t !== this._$AH && t !== T && this._(t) : t._$litType$ !== void 0 ? this.$(t) : t.nodeType !== void 0 ? this.T(t) : Vt(t) ? this.k(t) : this._(t);
   }
   O(t) {
     return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -407,7 +407,7 @@ class j {
     this._$AH !== t && (this._$AR(), this._$AH = this.O(t));
   }
   _(t) {
-    this._$AH !== c && R(this._$AH) ? this._$AA.nextSibling.data = t : this.T(S.createTextNode(t)), this._$AH = t;
+    this._$AH !== d && R(this._$AH) ? this._$AA.nextSibling.data = t : this.T(S.createTextNode(t)), this._$AH = t;
   }
   $(t) {
     var r;
@@ -449,7 +449,7 @@ class L {
     return this._$AM._$AU;
   }
   constructor(t, e, s, n, r) {
-    this.type = 1, this._$AH = c, this._$AN = void 0, this.element = t, this.name = e, this._$AM = n, this.options = r, s.length > 2 || s[0] !== "" || s[1] !== "" ? (this._$AH = Array(s.length - 1).fill(new String()), this.strings = s) : this._$AH = c;
+    this.type = 1, this._$AH = d, this._$AN = void 0, this.element = t, this.name = e, this._$AM = n, this.options = r, s.length > 2 || s[0] !== "" || s[1] !== "" ? (this._$AH = Array(s.length - 1).fill(new String()), this.strings = s) : this._$AH = d;
   }
   _$AI(t, e = this, s, n) {
     const r = this.strings;
@@ -458,12 +458,12 @@ class L {
     else {
       const l = t;
       let o, h;
-      for (t = r[0], o = 0; o < r.length - 1; o++) h = I(this, l[s + o], e, o), h === T && (h = this._$AH[o]), a || (a = !R(h) || h !== this._$AH[o]), h === c ? t = c : t !== c && (t += (h ?? "") + r[o + 1]), this._$AH[o] = h;
+      for (t = r[0], o = 0; o < r.length - 1; o++) h = I(this, l[s + o], e, o), h === T && (h = this._$AH[o]), a || (a = !R(h) || h !== this._$AH[o]), h === d ? t = d : t !== d && (t += (h ?? "") + r[o + 1]), this._$AH[o] = h;
     }
     a && !n && this.j(t);
   }
   j(t) {
-    t === c ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t ?? "");
+    t === d ? this.element.removeAttribute(this.name) : this.element.setAttribute(this.name, t ?? "");
   }
 }
 class Gt extends L {
@@ -471,7 +471,7 @@ class Gt extends L {
     super(...arguments), this.type = 3;
   }
   j(t) {
-    this.element[this.name] = t === c ? void 0 : t;
+    this.element[this.name] = t === d ? void 0 : t;
   }
 }
 class Xt extends L {
@@ -479,7 +479,7 @@ class Xt extends L {
     super(...arguments), this.type = 4;
   }
   j(t) {
-    this.element.toggleAttribute(this.name, !!t && t !== c);
+    this.element.toggleAttribute(this.name, !!t && t !== d);
   }
 }
 class Qt extends L {
@@ -487,8 +487,8 @@ class Qt extends L {
     super(t, e, s, n, r), this.type = 5;
   }
   _$AI(t, e = this) {
-    if ((t = I(this, t, e, 0) ?? c) === T) return;
-    const s = this._$AH, n = t === c && s !== c || t.capture !== s.capture || t.once !== s.once || t.passive !== s.passive, r = t !== c && (s === c || n);
+    if ((t = I(this, t, e, 0) ?? d) === T) return;
+    const s = this._$AH, n = t === d && s !== d || t.capture !== s.capture || t.once !== s.once || t.passive !== s.passive, r = t !== d && (s === d || n);
     n && this.element.removeEventListener(this.name, this, s), r && this.element.addEventListener(this.name, this, t), this._$AH = t;
   }
   handleEvent(t) {
@@ -779,7 +779,7 @@ class Y extends A {
   }
   render() {
     var a;
-    if (!this.notice) return c;
+    if (!this.notice) return d;
     const e = this.state, s = (e == null ? void 0 : e.status) === "running" || this.submitting, n = [
       ["highlights", "內容重點", "Highlights"],
       ["dates", "重要日期", "Important dates"],
@@ -787,20 +787,24 @@ class Y extends A {
       ["actions", "家長待辦", "Parent actions"],
       ["questions", "需確認事項", "To confirm"]
     ], r = (e == null ? void 0 : e.stage) === "analyzing" ? this.text("AI 分析中", "Analyzing") : (e == null ? void 0 : e.stage) === "rendering" ? this.text("處理附件頁面", "Rendering pages") : this.text("取得附件", "Fetching attachments");
-    return d`
-      ${this.showAttachments ? d`<div class="files">
+    return c`
+      <div class="body-row">
+        <slot name="body"></slot>
+        ${!this.showAttachments || this.notice.attachments.length === 0 ? this.analyzeButton(e, s) : d}
+      </div>
+      ${this.showAttachments ? c`<div class="files">
               ${this.notice.attachments.map(
       (l, o) => {
         var h;
-        return d`<div class="file">
+        return c`<div class="file">
                     <div class="name">
                       ${l.filename}
                       <div class="metadata">
-                        ${l.size !== null ? `${Math.round(l.size / 1024)} KB` : c}
+                        ${l.size !== null ? `${Math.round(l.size / 1024)} KB` : d}
                       </div>
                     </div>
                     <div class="file-actions">
-                      ${o === 0 ? this.analyzeButton(e, s) : c}
+                      ${o === 0 ? this.analyzeButton(e, s) : d}
                       <button
                         class="icon"
                         title=${this.text("下載附件", "Download attachment")}
@@ -814,39 +818,38 @@ class Y extends A {
                   </div>`;
       }
     )}
-            </div>` : c}
-      ${!this.showAttachments || this.notice.attachments.length === 0 ? this.analyzeButton(e, s) : c}
-      ${e && !e.enabled ? d`<p class="progress">${this.message("ai_not_configured")}</p>` : c}
-      ${s ? d`<p class="progress" role="status">${r} (${(e == null ? void 0 : e.processed) ?? 0}/${this.notice.attachments.length})</p>` : c}
-      ${this.error || e != null && e.error ? d`<p class="error" role="alert">
+            </div>` : d}
+      ${e && !e.enabled ? c`<p class="progress">${this.message("ai_not_configured")}</p>` : d}
+      ${s ? c`<p class="progress" role="status">${r} (${(e == null ? void 0 : e.processed) ?? 0}/${this.notice.attachments.length})</p>` : d}
+      ${this.error || e != null && e.error ? c`<p class="error" role="alert">
                 ${this.message(this.error || (e == null ? void 0 : e.error) || "")}
               </p>
-              ${this.error ? d`<button @click=${() => this.load()}>${this.text("重試連線", "Retry connection")}</button>` : c}` : c}
-      ${e != null && e.stale ? d`<p class="warning">${this.text("通告或模型設定已更新，請重新分析。", "Notice or model settings changed. Analyze again.")}</p>` : c}
-      ${(e == null ? void 0 : e.status) === "partial" ? d`<p class="warning">${this.text("部分完成", "Partially completed")}</p>` : c}
-      ${(a = e == null ? void 0 : e.missing) == null ? void 0 : a.map((l) => d`<p class="warning">${l.filename}: ${this.message(l.error)}</p>`)}
-      ${e != null && e.summary ? d`<div class="summary">
+              ${this.error ? c`<button @click=${() => this.load()}>${this.text("重試連線", "Retry connection")}</button>` : d}` : d}
+      ${e != null && e.stale ? c`<p class="warning">${this.text("通告或模型設定已更新，請重新分析。", "Notice or model settings changed. Analyze again.")}</p>` : d}
+      ${(e == null ? void 0 : e.status) === "partial" ? c`<p class="warning">${this.text("部分完成", "Partially completed")}</p>` : d}
+      ${(a = e == null ? void 0 : e.missing) == null ? void 0 : a.map((l) => c`<p class="warning">${l.filename}: ${this.message(l.error)}</p>`)}
+      ${e != null && e.summary ? c`<div class="summary">
               ${n.map(
       ([l, o, h]) => {
         var u, p;
-        return d`<h4>${this.text(o, h)}</h4>
+        return c`<h4>${this.text(o, h)}</h4>
                     <ul>
                       ${(p = (u = e.summary) == null ? void 0 : u[l]) != null && p.length ? e.summary[l].map(
-          (m) => d`<li>
+          (m) => c`<li>
                                   <span class="summary-text">${m.text}</span>
                                 </li>`
-        ) : d`<li class="metadata">
+        ) : c`<li class="metadata">
                               ${this.text("未提供", "Not provided")}
                             </li>`}
                     </ul>`;
       }
     )}
-            </div>` : c}
+            </div>` : d}
     `;
   }
   analyzeButton(e, s) {
     const n = e != null && e.summary ? this.text("重新分析", "Analyze again") : this.text("AI 整理重點", "AI summary");
-    return d`<button
+    return c`<button
       class="icon"
       title=${n}
       aria-label=${n}
@@ -884,6 +887,17 @@ y(Y, "properties", {
         var(--secondary-background-color, transparent) 70%,
         transparent
       );
+    }
+    .body-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: start;
+      gap: 12px;
+      padding: 2px 0 16px;
+    }
+    slot[name="body"] {
+      min-width: 0;
+      align-self: center;
     }
     .action-row {
       display: flex;
@@ -1121,19 +1135,19 @@ function ue(i) {
   return i === null ? "" : i < 1024 ? `${i} B` : i < 1048576 ? `${Math.round(i / 1024)} KB` : `${(i / 1048576).toFixed(1)} MB`;
 }
 function me() {
-  return d`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  return c`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" />
     <circle cx="12" cy="12" r="3" />
   </svg>`;
 }
 function fe() {
-  return d`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  return c`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <circle cx="12" cy="12" r="9" />
     <path d="m8 12 2.5 2.5L16 9" />
   </svg>`;
 }
 function ge() {
-  return d`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  return c`<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
     <rect x="3" y="4.5" width="13" height="16" rx="2" />
     <path d="M7 2.5v4M12 2.5v4M3 9h13" />
     <circle cx="17.5" cy="16.5" r="4" />
@@ -1186,7 +1200,7 @@ class Z extends A {
   _notice(t, e, s, n) {
     var l, o, h, u;
     const r = J(this.hass), a = s === "all" || s === "latest" && e === 0;
-    return d`<details
+    return c`<details
       class=${t.unread === !0 ? "unread-notice" : ""}
       ?open=${a}
     >
@@ -1197,21 +1211,21 @@ class Z extends A {
             >${vt(t.issued_at, this.hass)}</span
           > </span
         ><span class="status-icons">
-          ${t.unread === !0 ? d`<span class="unread">${r.unread}</span>` : c}
-          ${t.unread === !1 ? d`<span
+          ${t.unread === !0 ? c`<span class="unread">${r.unread}</span>` : d}
+          ${t.unread === !1 ? c`<span
                   class="status-icon read-status"
                   title=${r.read}
                   aria-label=${r.read}
                   role="img"
                   >${me()}</span
-                >` : c}
-          ${t.replied === !0 ? d`<span
+                >` : d}
+          ${t.replied === !0 ? c`<span
                   class="status-icon replied-status"
                   title=${r.replied}
                   aria-label=${r.replied}
                   role="img"
                   >${fe()}</span
-                >` : c}
+                >` : d}
         </span>
       </summary>
       <div class="meta">
@@ -1228,12 +1242,11 @@ class Z extends A {
           >
         </span>
       </div>
-      <div class="body">${t.content || r.noBody}</div>
-      ${(l = this.hass) != null && l.fetchWithAuth ? d`<hkte-notice-actions .hass=${this.hass} .entityId=${n} .notice=${t} .showAttachments=${((o = this.config) == null ? void 0 : o.show_attachments) !== !1}></hkte-notice-actions>` : c}
-      ${t.content_truncated ? d`<div class="hint">${r.truncated}</div>` : c}${!((h = this.hass) != null && h.fetchWithAuth) && ((u = this.config) != null && u.show_attachments) && t.attachments.length ? d`<div class="attachment-label meta">
+      ${(l = this.hass) != null && l.fetchWithAuth ? c`<hkte-notice-actions .hass=${this.hass} .entityId=${n} .notice=${t} .showAttachments=${((o = this.config) == null ? void 0 : o.show_attachments) !== !1}><div class="body" slot="body">${t.content || r.noBody}</div></hkte-notice-actions>` : c`<div class="body">${t.content || r.noBody}</div>`}
+      ${t.content_truncated ? c`<div class="hint">${r.truncated}</div>` : d}${!((h = this.hass) != null && h.fetchWithAuth) && ((u = this.config) != null && u.show_attachments) && t.attachments.length ? c`<div class="attachment-label meta">
                 <span>${r.attachments}</span>
               </div>
-              ${t.attachments.map((p) => d`<div class="attachment"><span class="attachment-name">${p.filename}</span><span>${p.mime_type}</span>${p.size !== null ? d`<span>${ue(p.size)}</span>` : c}</div>`)}` : c}
+              ${t.attachments.map((p) => c`<div class="attachment"><span class="attachment-name">${p.filename}</span><span>${p.mime_type}</span>${p.size !== null ? c`<span>${ue(p.size)}</span>` : d}</div>`)}` : d}
     </details>`;
   }
   render() {
@@ -1242,22 +1255,22 @@ class Z extends A {
       (g, M) => g + bt(M, a, n, r).length,
       0
     );
-    return d`<ha-card
+    return c`<ha-card
       ><div class="header">
         <h1>${((b = this.config) == null ? void 0 : b.title) ?? "HKTE Notices"}</h1>
         <span class="count">${o}</span>
       </div>
       <div class="content">
-        ${this.hass ? e.length === 0 ? d`<div class="empty">${t.noEntities}</div>` : e.map((g) => {
+        ${this.hass ? e.length === 0 ? c`<div class="empty">${t.noEntities}</div>` : e.map((g) => {
       var st, it;
       const M = bt(g, a, n, r), Mt = g.state === "unavailable" || g.state === "unknown";
-      return d`<section class="student">
-                    ${l ? d`<h2 class="student-title">
+      return c`<section class="student">
+                    ${l ? c`<h2 class="student-title">
                             ${((it = (st = this.config) == null ? void 0 : st.entity_names) == null ? void 0 : it[g.entityId]) ?? he(g.name, g.entityId)}
-                          </h2>` : c}
-                    ${Mt ? d`<div class="hint error">${t.unavailable}</div>` : M.length ? M.map((zt, Ut) => this._notice(zt, Ut, s, g.entityId)) : d`<div class="empty">${t.noNotices}</div>`}${g.hasMore && M.length ? d`<div class="hint">${t.more}</div>` : c}
+                          </h2>` : d}
+                    ${Mt ? c`<div class="hint error">${t.unavailable}</div>` : M.length ? M.map((zt, Ut) => this._notice(zt, Ut, s, g.entityId)) : c`<div class="empty">${t.noNotices}</div>`}${g.hasMore && M.length ? c`<div class="hint">${t.more}</div>` : d}
                   </section>`;
-    }) : d`<div class="hint">${t.unavailable}</div>`}
+    }) : c`<div class="hint">${t.unavailable}</div>`}
       </div></ha-card
     >`;
   }
@@ -1423,6 +1436,10 @@ y(Z, "properties", {
       overflow-wrap: anywhere;
       line-height: 1.55;
     }
+    .body[slot="body"] {
+      margin: 0;
+      padding: 0;
+    }
     .meta {
       display: flex;
       flex-wrap: wrap;
@@ -1557,7 +1574,7 @@ class G extends A {
     this.config = t;
   }
   render() {
-    return d`<ha-form
+    return c`<ha-form
         .hass=${this.hass}
         .data=${this.config}
         .schema=${[
@@ -1610,12 +1627,12 @@ class G extends A {
   }
   _entityNameFields() {
     const t = this.config.entities ?? [];
-    return t.length === 0 ? c : d`<section class="entity-names">
+    return t.length === 0 ? d : c`<section class="entity-names">
       <h3>Entity display names</h3>
       ${t.map(
       (e, s) => {
         var n;
-        return d`<label class="entity-name-field" for=${`entity-name-${s}`}>
+        return c`<label class="entity-name-field" for=${`entity-name-${s}`}>
             <span class="entity-name-label">${e}</span>
             <input
               id=${`entity-name-${s}`}

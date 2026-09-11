@@ -278,6 +278,10 @@ export class HkteNoticesCard extends LitElement {
       overflow-wrap: anywhere;
       line-height: 1.55;
     }
+    .body[slot="body"] {
+      margin: 0;
+      padding: 0;
+    }
     .meta {
       display: flex;
       flex-wrap: wrap;
@@ -513,8 +517,7 @@ export class HkteNoticesCard extends LitElement {
           >
         </span>
       </div>
-      <div class="body">${notice.content || text.noBody}</div>
-      ${this.hass?.fetchWithAuth ? html`<hkte-notice-actions .hass=${this.hass} .entityId=${entityId} .notice=${notice} .showAttachments=${this.config?.show_attachments !== false}></hkte-notice-actions>` : nothing}
+      ${this.hass?.fetchWithAuth ? html`<hkte-notice-actions .hass=${this.hass} .entityId=${entityId} .notice=${notice} .showAttachments=${this.config?.show_attachments !== false}><div class="body" slot="body">${notice.content || text.noBody}</div></hkte-notice-actions>` : html`<div class="body">${notice.content || text.noBody}</div>`}
       ${notice.content_truncated ? html`<div class="hint">${text.truncated}</div>` : nothing}${
         !this.hass?.fetchWithAuth &&
         this.config?.show_attachments &&
