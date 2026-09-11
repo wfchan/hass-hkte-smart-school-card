@@ -125,7 +125,7 @@ export class HkteNoticesCard extends LitElement {
       justify-content: space-between;
       gap: 12px;
       padding: 18px 20px 16px;
-      border-bottom: 1px solid var(--divider-color);
+      padding-bottom: 12px;
     }
     h1 {
       margin: 0;
@@ -145,10 +145,8 @@ export class HkteNoticesCard extends LitElement {
       padding-top: 10px;
     }
     .student + .student {
-      border-top: 1px solid
-        color-mix(in srgb, var(--divider-color) 70%, transparent);
-      margin-top: 18px;
-      padding-top: 18px;
+      margin-top: 24px;
+      padding-top: 0;
     }
     .student-title {
       margin: 0 4px 10px;
@@ -159,24 +157,22 @@ export class HkteNoticesCard extends LitElement {
       text-transform: uppercase;
     }
     details {
-      margin: 10px 0;
+      margin: 14px 0;
       overflow: hidden;
-      border: 1px solid
-        color-mix(in srgb, var(--divider-color) 85%, transparent);
       border-radius: 8px;
       background: color-mix(
         in srgb,
-        var(--card-background-color, var(--ha-card-background, transparent)) 92%,
-        var(--primary-color) 8%
+        var(--card-background-color, var(--ha-card-background, transparent)) 96%,
+        var(--primary-color) 4%
       );
-      box-shadow: 0 1px 2px
-        color-mix(in srgb, var(--primary-text-color) 8%, transparent);
+      box-shadow: 0 2px 10px
+        color-mix(in srgb, var(--primary-text-color) 7%, transparent);
     }
     details[open] {
-      border-color: color-mix(
+      background: color-mix(
         in srgb,
-        var(--primary-color) 28%,
-        var(--divider-color)
+        var(--card-background-color, var(--ha-card-background, transparent)) 94%,
+        var(--primary-color) 6%
       );
     }
     summary {
@@ -189,11 +185,9 @@ export class HkteNoticesCard extends LitElement {
       list-style: none;
     }
     .unread-notice summary {
-      border-inline-start: 3px solid var(--warning-color, #d89b00);
-      padding-inline-start: 11px;
       background: color-mix(
         in srgb,
-        var(--warning-color, #d89b00) 8%,
+        var(--warning-color, #d89b00) 5%,
         transparent
       );
     }
