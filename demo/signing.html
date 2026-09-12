@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HKTE signing preview — synthetic data</title>
+    <style>
+      :root {
+        --primary-text-color: #e8eaed;
+        --secondary-text-color: #b4bac3;
+        --primary-color: #f39442;
+        --text-primary-color: #15191e;
+        --card-background-color: #20252c;
+        --secondary-background-color: #292f38;
+        --divider-color: #424954;
+      }
+      body {
+        background: #15191e;
+        color: var(--primary-text-color);
+        font-family: system-ui, sans-serif;
+        margin: 0;
+        padding: 24px;
+      }
+      main {
+        max-width: 600px;
+        margin: auto;
+        padding: 22px;
+        background: var(--card-background-color);
+        border-radius: 12px;
+      }
+      p {
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h2>通告簽署預覽</h2>
+      <p>合成測試資料。此頁不連接 HKTE，確認按鈕只會產生模擬結果。</p>
+      <hkte-sign-notice id="sign"></hkte-sign-notice>
+    </main>
+    <script type="module">
+      import "/src/sign-notice.ts";
+      import { fixtureForm } from "/test/fixtures/reply-form.ts";
+      const f = fixtureForm();
+      f.title = "家長活動回條（測試通告）";
+      f.introduction = "請選擇是否參加家長活動，並核對以下回覆。";
+      f.questions[0].label = "是否參加？";
+      f.questions[0].options = [
+        { value: 0, label: "參加" },
+        { value: 1, label: "不參加" },
+      ];
+      f.questions[1].label = "參加人數";
+      const element = document.querySelector("#sign");
+      element.entityId = "sensor.synthetic_notice_content";
+      element.notice = { id: "sample", title: f.title, replied: false };
+      window.signingDemoPosts = [];
+      element.hass = {
+        states: {},
+        locale: { language: "zh-Hant" },
+        fetchWithAuth: async (path, init) => {
+          if (init?.method === "POST") {
+            window.signingDemoPosts.push({ path, body: JSON.parse(init.body) });
+            return Response.json({
+              status: "succeeded",
+              replied: true,
+              retry_after: 0,
+            });
+          }
+          return Response.json(f);
+        },
+      };
+    </script>
+  </body>
+</html>

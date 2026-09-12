@@ -1,5 +1,6 @@
 import { LitElement, css, html, nothing, type PropertyValues } from "lit";
 import { systemDeadline, deadlineStyles } from "./deadline";
+import "./sign-notice";
 import type { HomeAssistant, Notice, NoticeAttachment } from "./types";
 import {
   parseAnalysisState,
@@ -389,6 +390,7 @@ export class HkteNoticeActions extends LitElement {
           : this.text("取得附件", "Fetching attachments");
     return html`
       ${systemDeadline(this.notice.deadline, this.hass)}
+      ${this.hass?.states[this.entityId]?.attributes.signing_enabled === true ? html`<hkte-sign-notice .hass=${this.hass} .entityId=${this.entityId} .notice=${this.notice}></hkte-sign-notice>` : nothing}
       <div class="body-row">
         <slot name="body"></slot>
         ${!this.showAttachments || this.notice.attachments.length === 0 ? this.analyzeButton(state, busy) : nothing}

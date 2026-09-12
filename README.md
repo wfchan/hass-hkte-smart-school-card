@@ -1,10 +1,22 @@
 # HKTE Smart School Notices Card
 
-Read-only Lovelace card for the [HKTE Smart School Home Assistant integration](https://github.com/wfchan/hass-hkte-smart-school).
+Lovelace card for the [HKTE Smart School Home Assistant integration](https://github.com/wfchan/hass-hkte-smart-school), with optional confirmed notice signing.
 
 ## 繁體中文說明
 
-這是一張唯讀的 Home Assistant Lovelace 卡片，用於顯示 HKTE Smart School 子女通告。卡片不會直接呼叫 HKTE、不會標記通告已讀或回覆；下載及 AI 分析會透過整合提供的、受 Home Assistant 權限保護的端點執行。
+這是一張 Home Assistant Lovelace 卡片，用於顯示 HKTE Smart School 子女通告。下載、AI 分析及可選的通告簽署均透過受 HA 權限保護的整合端點，卡片不會直接呼叫 HKTE。閱讀或展開通告不會改變 HKTE 狀態。
+
+### 簽署通告
+
+需要整合 v0.5.0 或更新版本，並在整合選項啟用 Message Hub 簽署、填寫 HTTPS 網址及專用 HKTE API key。卡片設定不儲存金鑰。
+
+只有 API 允許簽署時才顯示按鈕。親自選擇答案後，按「檢查回覆」，再按「確認並簽署」。支援知悉、選擇題、文字、數量及條件題，不預設同意、不由 AI 代答。過期或不支援的表格會顯示原因，請在官方 App 處理。簽署無法在此撤銷或修改；若結果不明，至少等候五分鐘後按「檢查結果」，不要建立另一筆簽署。
+
+### Sign notices
+
+Requires integration v0.5.0 or later with Message Hub signing enabled and its HTTPS URL/dedicated HKTE key configured in integration options. Keys are never stored in the card.
+
+The button appears only when the API permits signing. Choose answers yourself, select **Review reply**, then **Confirm and sign**. Acknowledgement, choice, text, quantities and conditional questions are supported without default consent or AI answers. Blocked forms show a reason and must be handled in the official app. Replies cannot be undone or edited here. For uncertain results, wait at least five minutes and use **Check result** instead of signing again.
 
 ### HACS 安裝
 
@@ -61,7 +73,7 @@ show_student_name: true
 show_attachments: true
 ```
 
-The card reads Home Assistant entity state and uses authenticated integration endpoints for explicit downloads and analysis. It never calls HKTE directly, marks notices as read or sends replies. Attachments show filename, MIME type, size and a download icon. Notice bodies and AI results are escaped text; embedded links and media are never loaded.
+The card reads Home Assistant entity state and uses authenticated integration endpoints for downloads, analysis and explicitly confirmed signing. It never calls HKTE directly or marks notices read merely by opening them. Attachments show filename, MIME type, size and a download icon. Notice bodies and AI results are escaped text; embedded links and media are never loaded.
 
 ## Downloads and AI
 
