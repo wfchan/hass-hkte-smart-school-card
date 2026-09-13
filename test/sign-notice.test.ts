@@ -60,6 +60,34 @@ async function chooseNoAndReview(e: HkteSignNotice) {
   button(e, "Review reply").click();
   await settle();
 }
+it("does not invent a generic comment field", async () => {
+  const { e } = await mount();
+  button(e, "Sign notice").click();
+  await settle();
+  expect(e.shadowRoot!.textContent).not.toContain("Comment (optional)");
+  expect(e.shadowRoot!.querySelectorAll("textarea")).toHaveLength(0);
+});
+it("renders text input only when it exists in the HKTE form", async () => {
+  const form = fixtureForm();
+  form.questions = [
+    {
+      id: "main",
+      label: "School comment",
+      type: "text",
+      required: true,
+      options: [],
+      ranges: [],
+      when: null,
+    },
+  ];
+  const { e } = await mount(vi.fn().mockResolvedValue(response(form)));
+  button(e, "Sign notice").click();
+  await settle();
+  expect(
+    e.shadowRoot!.querySelector('textarea[aria-label="School comment"]'),
+  ).not.toBeNull();
+  expect(e.shadowRoot!.textContent).not.toContain("Comment (optional)");
+});
 it("opening and choosing never signs; explicit reviewed confirmation submits exact answers", async () => {
   const { e, fetch } = await mount();
   await chooseNoAndReview(e);
@@ -79,7 +107,6 @@ it("opening and choosing never signs; explicit reviewed confirmation submits exa
   expect(JSON.parse(posts[0][1].body)).toEqual({
     form_version: "a".repeat(64),
     answers: { main: [1] },
-    comment: "",
     confirmed: true,
   });
   expect(e.shadowRoot!.textContent).toContain("Signature confirmed by HKTE");

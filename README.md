@@ -44,7 +44,7 @@ The preview shows the current deadline and attachment controls with synthetic sa
 
 [![Open your Home Assistant instance and show the HACS plugins dashboard](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=wfchan&repository=hass-hkte-smart-school-card&category=plugin)
 
-In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. Use card **0.4.0** with integration **0.6.0**. Downloads, AI summaries and direct HKTE signing require integration **0.6.0** or newer.
+In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. Use card **0.4.1** with integration **0.6.1**. Downloads, AI summaries and direct HKTE signing require integration **0.6.0** or newer.
 
 ## Dashboard card
 

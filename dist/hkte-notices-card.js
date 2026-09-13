@@ -697,7 +697,7 @@ class et extends v {
     super();
     f(this, "signature", "");
     f(this, "generation", 0);
-    this.answers = {}, this.comment = "", this.reviewing = !1, this.busy = !1, this.error = "";
+    this.answers = {}, this.reviewing = !1, this.busy = !1, this.error = "";
   }
   t(t, i) {
     var n, r, a, c;
@@ -751,7 +751,7 @@ class et extends v {
   }
   async open() {
     var i;
-    this.answers = {}, this.comment = "", this.reviewing = !1, await this.load(), await this.updateComplete;
+    this.answers = {}, this.reviewing = !1, await this.load(), await this.updateComplete;
     const t = (i = this.shadowRoot) == null ? void 0 : i.querySelector("dialog");
     t && !t.open && t.showModal();
   }
@@ -817,10 +817,9 @@ class et extends v {
           await this.request("/sign", {
             form_version: this.form.form_version,
             answers: vt(this.form, this.answers),
-            comment: this.comment,
             confirmed: !0
           })
-        ), this.reviewing = !1, this.operation.status === "not_sent" && (await this.load(), this.answers = {}, this.comment = "", this.error = this.t(
+        ), this.reviewing = !1, this.operation.status === "not_sent" && (await this.load(), this.answers = {}, this.error = this.t(
           "未有提交：表格或狀態可能已改變。請重新查看並確認答案。",
           "Not submitted: the form or state may have changed. Review the form and answers again."
         ));
@@ -830,7 +829,7 @@ class et extends v {
           "invalid_answers",
           "cannot_sign",
           "signing_not_configured"
-        ].includes(t.message) ? (await this.load(), this.answers = {}, this.comment = "", this.error = this.t(
+        ].includes(t.message) ? (await this.load(), this.answers = {}, this.error = this.t(
           "未有提交，請重新查看表格及確認答案。",
           "Not submitted. Review the form and answers again."
         )) : this.operation = {
@@ -929,16 +928,9 @@ class et extends v {
                                 </dd>`
     )}
                         </dl>
-                        ${this.comment ? l`<p>${this.comment}</p>` : h}
                         <p>
                           ${this.t("確認後會簽署真實 HKTE 通告，無法在此撤銷或修改回覆。", "Confirming signs the real HKTE notice. Replies cannot be undone or edited here.")}
-                        </p>` : l`${V(t, this.answers).map((p) => this.question(p))}<label
-                          >${this.t("備註（可留空）", "Comment (optional)")}<textarea
-                            maxlength="10000"
-                            .value=${this.comment}
-                            @input=${(p) => this.comment = p.target.value}
-                          ></textarea>
-                        </label>`}
+                        </p>` : l`${V(t, this.answers).map((p) => this.question(p))}`}
               ` : h}
         <div class="footer">
           <button ?disabled=${this.busy} @click=${() => this.close()}>
@@ -974,7 +966,6 @@ f(et, "properties", {
   form: { state: !0 },
   operation: { state: !0 },
   answers: { state: !0 },
-  comment: { state: !0 },
   reviewing: { state: !0 },
   busy: { state: !0 },
   error: { state: !0 }

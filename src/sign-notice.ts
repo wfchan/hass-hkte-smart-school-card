@@ -23,7 +23,6 @@ export class HkteSignNotice extends LitElement {
     form: { state: true },
     operation: { state: true },
     answers: { state: true },
-    comment: { state: true },
     reviewing: { state: true },
     busy: { state: true },
     error: { state: true },
@@ -175,7 +174,6 @@ export class HkteSignNotice extends LitElement {
   declare private form?: ReplyForm;
   declare private operation?: Operation;
   declare private answers: Answers;
-  declare private comment: string;
   declare private reviewing: boolean;
   declare private busy: boolean;
   declare private error: string;
@@ -185,7 +183,6 @@ export class HkteSignNotice extends LitElement {
   constructor() {
     super();
     this.answers = {};
-    this.comment = "";
     this.reviewing = false;
     this.busy = false;
     this.error = "";
@@ -262,7 +259,6 @@ export class HkteSignNotice extends LitElement {
   }
   private async open() {
     this.answers = {};
-    this.comment = "";
     this.reviewing = false;
     await this.load();
     await this.updateComplete;
@@ -357,7 +353,6 @@ export class HkteSignNotice extends LitElement {
         await this.request("/sign", {
           form_version: this.form.form_version,
           answers: selectedAnswers(this.form, this.answers),
-          comment: this.comment,
           confirmed: true,
         }),
       );
@@ -365,7 +360,6 @@ export class HkteSignNotice extends LitElement {
       if (this.operation.status === "not_sent") {
         await this.load();
         this.answers = {};
-        this.comment = "";
         this.error = this.t(
           "未有提交：表格或狀態可能已改變。請重新查看並確認答案。",
           "Not submitted: the form or state may have changed. Review the form and answers again.",
@@ -383,7 +377,6 @@ export class HkteSignNotice extends LitElement {
       ) {
         await this.load();
         this.answers = {};
-        this.comment = "";
         this.error = this.t(
           "未有提交，請重新查看表格及確認答案。",
           "Not submitted. Review the form and answers again.",
@@ -510,17 +503,10 @@ export class HkteSignNotice extends LitElement {
                                 </dd>`,
                           )}
                         </dl>
-                        ${this.comment ? html`<p>${this.comment}</p>` : nothing}
                         <p>
                           ${this.t("確認後會簽署真實 HKTE 通告，無法在此撤銷或修改回覆。", "Confirming signs the real HKTE notice. Replies cannot be undone or edited here.")}
                         </p>`
-                    : html`${activeQuestions(form, this.answers).map((q) => this.question(q))}<label
-                          >${this.t("備註（可留空）", "Comment (optional)")}<textarea
-                            maxlength="10000"
-                            .value=${this.comment}
-                            @input=${(e: Event) => (this.comment = (e.target as HTMLTextAreaElement).value)}
-                          ></textarea>
-                        </label>`
+                    : html`${activeQuestions(form, this.answers).map((q) => this.question(q))}`
                 }
               `
             : nothing
