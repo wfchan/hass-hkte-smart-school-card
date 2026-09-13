@@ -237,7 +237,7 @@ export class HkteSignNotice extends LitElement {
     const value = await r.json();
     if (!r.ok)
       throw new Error(
-        typeof value.error === "string" ? value.error : "hub_unavailable",
+        typeof value.error === "string" ? value.error : "signing_unavailable",
       );
     return value;
   }
@@ -253,8 +253,8 @@ export class HkteSignNotice extends LitElement {
     } catch {
       if (gen === this.generation)
         this.error = this.t(
-          "未能取得回覆表格，請檢查 Message Hub 設定後重試。",
-          "Could not load reply form. Check Message Hub settings and retry.",
+          "未能取得 HKTE 回覆表格，請稍後重試。",
+          "Could not load the HKTE reply form. Try again later.",
         );
     } finally {
       if (gen === this.generation) this.busy = false;

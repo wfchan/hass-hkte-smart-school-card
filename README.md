@@ -1,6 +1,6 @@
 # HKTE Smart School Notices Card
 
-Lovelace card for the [HKTE Smart School Home Assistant integration](https://github.com/wfchan/hass-hkte-smart-school), with optional confirmed notice signing.
+Lovelace card for the [HKTE Smart School Home Assistant integration](https://github.com/wfchan/hass-hkte-smart-school), including optional direct HKTE signing.
 
 ## 繁體中文說明
 
@@ -8,15 +8,7 @@ Lovelace card for the [HKTE Smart School Home Assistant integration](https://git
 
 ### 簽署通告
 
-需要整合 v0.5.0 或更新版本，並在整合選項啟用 Message Hub 簽署、填寫 HTTPS 網址及專用 HKTE API key。卡片設定不儲存金鑰。
-
 只有 API 允許簽署時才顯示按鈕。親自選擇答案後，按「檢查回覆」，再按「確認並簽署」。支援知悉、選擇題、文字、數量及條件題，不預設同意、不由 AI 代答。過期或不支援的表格會顯示原因，請在官方 App 處理。簽署無法在此撤銷或修改；若結果不明，至少等候五分鐘後按「檢查結果」，不要建立另一筆簽署。
-
-### Sign notices
-
-Requires integration v0.5.0 or later with Message Hub signing enabled and its HTTPS URL/dedicated HKTE key configured in integration options. Keys are never stored in the card.
-
-The button appears only when the API permits signing. Choose answers yourself, select **Review reply**, then **Confirm and sign**. Acknowledgement, choice, text, quantities and conditional questions are supported without default consent or AI answers. Blocked forms show a reason and must be handled in the official app. Replies cannot be undone or edited here. For uncertain results, wait at least five minutes and use **Check result** instead of signing again.
 
 ### HACS 安裝
 
@@ -52,7 +44,7 @@ The preview shows the current deadline and attachment controls with synthetic sa
 
 [![Open your Home Assistant instance and show the HACS plugins dashboard](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=wfchan&repository=hass-hkte-smart-school-card&category=plugin)
 
-In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. The recommended pairing is card **0.2.6** with integration **0.4.5**. Downloads and manual AI summaries require integration **0.4.0** or newer; optional automatic new-notice analysis requires **0.4.3** or newer.
+In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. Use card **0.4.0** with integration **0.6.0**. Downloads, AI summaries and direct HKTE signing require integration **0.6.0** or newer.
 
 ## Dashboard card
 
@@ -73,7 +65,7 @@ show_student_name: true
 show_attachments: true
 ```
 
-The card reads Home Assistant entity state and uses authenticated integration endpoints for downloads, analysis and explicitly confirmed signing. It never calls HKTE directly or marks notices read merely by opening them. Attachments show filename, MIME type, size and a download icon. Notice bodies and AI results are escaped text; embedded links and media are never loaded.
+The card reads Home Assistant entity state and uses authenticated integration endpoints for downloads and analysis. It never calls HKTE directly or marks notices read merely by opening them. Attachments show filename, MIME type, size and a download icon. Notice bodies and AI results are escaped text; embedded links and media are never loaded.
 
 ## Downloads and AI
 
@@ -89,6 +81,21 @@ and optional FIFO analysis queue. OpenAI-compatible models still need image-inpu
 support; consistent display is not a guarantee of factual accuracy.
 
 Downloads and summaries require entity read permission. API keys, downloaded bytes and summaries are not written into card configuration or entity state. See the integration README for privacy and storage details. `show_attachments` controls both metadata and download rows; it does not exclude files from whole-notice AI analysis.
+
+## Direct HKTE signing
+
+When direct signing is enabled in the integration options, the card can show a
+signing entry for supported notices. Review every question and option, choose
+the answers yourself, select **Review reply**, and then select **Confirm and
+sign**. The card never supplies defaults or AI-generated answers. Payment,
+uploads, unknown question types, expired notices and already-signed notices are
+blocked and should be handled in the official HKTE app.
+
+Opening the form is read-only. A submission is saved locally before the HKTE
+request, and an uncertain result is never sent again automatically. Wait at
+least five minutes before using **Check result**; the check only reads the
+provider's saved reply. The signing control requires Home Assistant entity
+control permission and does not mark a notice read when opened.
 
 Each notice title row includes its issued date. Read notices use a green eye icon, and replied notices use a sign icon; these status icons stay aligned to the far right for quick scanning. Unread notices retain the orange `未讀` badge, a highlighted row style, and a short attention pulse (disabled when reduced motion is enabled).
 
