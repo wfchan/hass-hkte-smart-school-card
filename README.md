@@ -22,9 +22,9 @@ Lovelace card for the [HKTE Smart School Home Assistant integration](https://git
 
 ### AI 摘要
 
-卡片的回覆限期以 HKTE 系統設定為準，不受 AI 分析狀態影響；系統未提供時會明確顯示未提供。搭配整合 v0.6.1 或更新版本，AI 會提示 PDF 與系統日期的差異，並以系統回覆限期為準，活動及交件日期則另外列出。請重新分析舊摘要以套用此規則。
+卡片的回覆限期以 HKTE 系統設定為準，不受 AI 分析狀態影響；系統未提供時會明確顯示未提供。搭配整合 v0.4.9 或更新版本，AI 會提示 PDF 與系統日期的差異，並以系統回覆限期為準，活動及交件日期則另外列出。請重新分析舊摘要以套用此規則。
 
-The card uses the HKTE system's configured reply deadline, regardless of AI analysis status; missing system deadlines are shown as not provided. With integration v0.6.1 or later, AI summaries flag PDF discrepancies and give precedence to the system reply deadline. Event and submission dates remain separate. Analyze older summaries again to apply this rule.
+The card uses the HKTE system's configured reply deadline, regardless of AI analysis status; missing system deadlines are shown as not provided. With integration v0.4.9 or later, AI summaries flag PDF discrepancies and give precedence to the system reply deadline. Event and submission dates remain separate. Analyze older summaries again to apply this rule.
 
 按「AI 整理重點」才會開始分析；「重新分析」會明確取代現有結果。摘要包含內容重點、重要日期、費用、家長待辦及需確認事項，不顯示附件檔名或頁碼引用。處理進度、部分完成、錯誤重試及未提供欄目都會清楚顯示。
 
@@ -44,7 +44,7 @@ The preview shows the current deadline and attachment controls with synthetic sa
 
 [![Open your Home Assistant instance and show the HACS plugins dashboard](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=wfchan&repository=hass-hkte-smart-school-card&category=plugin)
 
-In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. Use card **0.4.1** with integration **0.6.1**. Downloads, AI summaries and direct HKTE signing require integration **0.6.0** or newer.
+In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. Use card **0.4.2** with integration **0.6.2**. Downloads, AI summaries and direct HKTE signing require integration **0.6.0** or newer.
 
 ## Dashboard card
 
