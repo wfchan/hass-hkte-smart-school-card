@@ -10,6 +10,8 @@ import type {
   NoticeFeed,
 } from "./types";
 
+const INTEGRATION_URL = "https://github.com/wfchan/hass-hkte-smart-school";
+
 const LABELS = {
   zh: {
     all: "全部",
@@ -23,6 +25,10 @@ const LABELS = {
     noNotices: "暫無通告。",
     unavailable: "通告資料暫時無法載入。",
     noEntities: "找不到 HKTE 通告 sensor。",
+    integrationRequired: "此卡片必須搭配 HKTE Smart School 整合一併使用。",
+    integrationHelp:
+      "單獨安裝卡片不會顯示任何通告。請先安裝並設定整合，確認出現 Notice content 感應器。",
+    integrationLink: "安裝 HKTE Smart School 整合",
     more: "尚有其他通告",
     attachments: "附件",
     noDate: "未提供",
@@ -39,6 +45,11 @@ const LABELS = {
     noNotices: "No notices.",
     unavailable: "Notice data is temporarily unavailable.",
     noEntities: "No HKTE notice sensors found.",
+    integrationRequired:
+      "This card must be used with the HKTE Smart School integration.",
+    integrationHelp:
+      "The card alone shows no notices. Install and configure the integration, then confirm a Notice content sensor exists.",
+    integrationLink: "Install the HKTE Smart School integration",
     more: "More notices are available",
     attachments: "Attachments",
     noDate: "Not provided",
@@ -340,6 +351,30 @@ export class HkteNoticesCard extends LitElement {
       padding: 18px 0 4px;
       color: var(--secondary-text-color);
     }
+    .empty.warning {
+      margin-top: 4px;
+      padding: 12px 14px;
+      border-left: 3px solid var(--warning-color, #d89b00);
+      border-radius: 4px;
+      background: color-mix(
+        in srgb,
+        var(--warning-color, #d89b00) 7%,
+        transparent
+      );
+    }
+    .empty.warning p {
+      margin: 0 0 6px;
+    }
+    .empty.warning p:last-child {
+      margin-bottom: 0;
+    }
+    .warning-title {
+      color: var(--primary-text-color);
+      font-weight: 650;
+    }
+    .empty.warning a {
+      color: var(--primary-color);
+    }
     .error {
       color: var(--error-color);
     }
@@ -541,7 +576,18 @@ export class HkteNoticesCard extends LitElement {
           !this.hass
             ? html`<div class="hint">${text.unavailable}</div>`
             : feeds.length === 0
-              ? html`<div class="empty">${text.noEntities}</div>`
+              ? html`<div class="empty warning">
+                  <p class="warning-title">${text.integrationRequired}</p>
+                  <p>${text.noEntities} ${text.integrationHelp}</p>
+                  <p>
+                    <a
+                      href=${INTEGRATION_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      >${text.integrationLink}</a
+                    >
+                  </p>
+                </div>`
               : feeds.map((feed) => {
                   const notices = visibleNotices(feed, filter, limit, days);
                   const unavailable =

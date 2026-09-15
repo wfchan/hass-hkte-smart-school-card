@@ -172,6 +172,14 @@ describe("card", () => {
     expect(empty.shadowRoot?.textContent).toContain(
       "No HKTE notice sensors found",
     );
+    expect(empty.shadowRoot?.textContent).toContain(
+      "must be used with the HKTE Smart School integration",
+    );
+    const link = empty.shadowRoot?.querySelector("a");
+    expect(link?.getAttribute("href")).toBe(
+      "https://github.com/wfchan/hass-hkte-smart-school",
+    );
+    expect(link?.getAttribute("rel")).toBe("noopener noreferrer");
   });
 
   it("loads and emits visual editor configuration", async () => {

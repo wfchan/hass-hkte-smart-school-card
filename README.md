@@ -2,9 +2,18 @@
 
 Lovelace card for the [HKTE Smart School Home Assistant integration](https://github.com/wfchan/hass-hkte-smart-school), including optional direct HKTE signing.
 
+> [!IMPORTANT]
+> This card must be installed together with the **HKTE Smart School**
+> Home Assistant integration. The card is only a dashboard view of that
+> integration: on its own it has no data source and renders an installation
+> warning instead of notices.
+
 ## 繁體中文說明
 
 這是一張 Home Assistant Lovelace 卡片，用於顯示 HKTE Smart School 子女通告。下載、AI 分析及可選的通告簽署均透過受 HA 權限保護的整合端點，卡片不會直接呼叫 HKTE。閱讀或展開通告不會改變 HKTE 狀態。
+
+> [!IMPORTANT]
+> 此卡片必須與 **HKTE Smart School** Home Assistant 整合一併安裝。卡片只是整合的儀表板檢視，單獨安裝不會有任何通告資料，只會顯示安裝警告。
 
 ### 簽署通告
 
@@ -12,11 +21,13 @@ Lovelace card for the [HKTE Smart School Home Assistant integration](https://git
 
 ### HACS 安裝
 
-上方的 HACS 按鈕可直接開啟卡片安裝頁。也可在 HACS 加入 `https://github.com/wfchan/hass-hkte-smart-school-card` 作為 **Plugin**，安裝 **HKTE Smart School Notices Card**，並在 Home Assistant 資源提示出現時加入產生的 JavaScript resource。建議與 HKTE Smart School 整合一起使用。
+上方的 HACS 按鈕可直接開啟卡片安裝頁。也可在 HACS 加入 `https://github.com/wfchan/hass-hkte-smart-school-card` 作為 **Plugin**，安裝 **HKTE Smart School Notices Card**，並在 Home Assistant 資源提示出現時加入產生的 JavaScript resource。必須與 HKTE Smart School 整合一起使用，請先完成整合的帳號設定。
 
 ### 顯示及設定
 
 不設定 `entities` 時，卡片會自動尋找所有 `notice_content` 感測器；亦可指定一個或多個實體。支援全部/未讀篩選、顯示數量（預設 5）、日期範圍、最新/全部/不展開、子女名稱及附件 metadata。
+
+若找不到任何通告感測器，卡片不會空白一片，而是顯示警告，說明它必須搭配 HKTE Smart School 整合使用，並提供整合的安裝連結。
 
 每份通告會顯示標題、發出日期、已讀/已回覆狀態、截止日期及正文。附件會顯示檔名、MIME 類型及大小，下載按鈕使用整合的驗證端點。正文及 AI 結果會以安全純文字顯示，不載入內嵌連結或媒體。
 
@@ -44,7 +55,7 @@ The preview shows the current deadline and attachment controls with synthetic sa
 
 [![Open your Home Assistant instance and show the HACS plugins dashboard](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=wfchan&repository=hass-hkte-smart-school-card&category=plugin)
 
-In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. Use card **0.4.2** with integration **0.6.2**. Downloads, AI summaries and direct HKTE signing require integration **0.6.0** or newer.
+In HACS, add `https://github.com/wfchan/hass-hkte-smart-school-card` as a custom repository with category **Plugin**, install **HKTE Smart School Notices Card**, then add the generated resource when Home Assistant prompts you. Use card **0.4.3** with integration **0.6.2**. Downloads, AI summaries and direct HKTE signing require integration **0.6.0** or newer.
 
 ## Dashboard card
 
@@ -66,6 +77,8 @@ show_attachments: true
 ```
 
 The card reads Home Assistant entity state and uses authenticated integration endpoints for downloads and analysis. It never calls HKTE directly or marks notices read merely by opening them. Attachments show filename, MIME type, size and a download icon. Notice bodies and AI results are escaped text; embedded links and media are never loaded.
+
+When no notice sensor is found, the card renders an installation warning naming the required HKTE Smart School integration and linking to it, instead of an empty card.
 
 ## Downloads and AI
 
