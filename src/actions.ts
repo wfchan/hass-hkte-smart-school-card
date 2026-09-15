@@ -276,9 +276,13 @@ export class HkteNoticeActions extends LitElement {
       this.signature = signature;
       this.generation++;
       clearTimeout(this.timer);
-      this.state = undefined;
-      this.error = "";
-      void this.load();
+      // Defer past this update cycle: resetting state here would schedule a
+      // redundant second update.
+      queueMicrotask(() => {
+        this.state = undefined;
+        this.error = "";
+        void this.load();
+      });
     }
   }
   connectedCallback() {

@@ -213,7 +213,9 @@ export class HkteSignNotice extends LitElement {
     ) {
       this.signature = signature;
       this.generation++;
-      void this.load();
+      // Defer past this update cycle: load() sets reactive state, and doing
+      // that inside updated() would schedule a redundant second update.
+      queueMicrotask(() => void this.load());
     }
   }
   disconnectedCallback() {
