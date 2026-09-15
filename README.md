@@ -8,43 +8,6 @@ Lovelace card for the [HKTE Smart School Home Assistant integration](https://git
 > integration: on its own it has no data source and renders an installation
 > warning instead of notices.
 
-## 繁體中文說明
-
-這是一張 Home Assistant Lovelace 卡片，用於顯示 HKTE Smart School 子女通告。下載、AI 分析及可選的通告簽署均透過受 HA 權限保護的整合端點，卡片不會直接呼叫 HKTE。閱讀或展開通告不會改變 HKTE 狀態。
-
-> [!IMPORTANT]
-> 此卡片必須與 **HKTE Smart School** Home Assistant 整合一併安裝。卡片只是整合的儀表板檢視，單獨安裝不會有任何通告資料，只會顯示安裝警告。
-
-### 簽署通告
-
-只有 API 允許簽署時才顯示按鈕。親自選擇答案後，按「檢查回覆」，再按「確認並簽署」。支援知悉、選擇題、文字、數量及條件題，不預設同意、不由 AI 代答。過期或不支援的表格會顯示原因，請在官方 App 處理。簽署無法在此撤銷或修改；若結果不明，至少等候五分鐘後按「檢查結果」，不要建立另一筆簽署。
-
-### HACS 安裝
-
-上方的 HACS 按鈕可直接開啟卡片安裝頁。也可在 HACS 加入 `https://github.com/wfchan/hass-hkte-smart-school-card` 作為 **Plugin**，安裝 **HKTE Smart School Notices Card**，並在 Home Assistant 資源提示出現時加入產生的 JavaScript resource。必須與 HKTE Smart School 整合一起使用，請先完成整合的帳號設定。
-
-### 顯示及設定
-
-不設定 `entities` 時，卡片會自動尋找所有 `notice_content` 感測器；亦可指定一個或多個實體。支援全部/未讀篩選、顯示數量（預設 5）、日期範圍、最新/全部/不展開、子女名稱及附件 metadata。
-
-若找不到任何通告感測器，卡片不會空白一片，而是顯示警告，說明它必須搭配 HKTE Smart School 整合使用，並提供整合的安裝連結。
-
-每份通告會顯示標題、發出日期、已讀/已回覆狀態、截止日期及正文。附件會顯示檔名、MIME 類型及大小，下載按鈕使用整合的驗證端點。正文及 AI 結果會以安全純文字顯示，不載入內嵌連結或媒體。
-
-### AI 摘要
-
-卡片的回覆限期以 HKTE 系統設定為準，不受 AI 分析狀態影響；系統未提供時會明確顯示未提供。搭配整合 v0.4.9 或更新版本，AI 會提示 PDF 與系統日期的差異，並以系統回覆限期為準，活動及交件日期則另外列出。請重新分析舊摘要以套用此規則。
-
-The card uses the HKTE system's configured reply deadline, regardless of AI analysis status; missing system deadlines are shown as not provided. With integration v0.4.9 or later, AI summaries flag PDF discrepancies and give precedence to the system reply deadline. Event and submission dates remain separate. Analyze older summaries again to apply this rule.
-
-按「AI 整理重點」才會開始分析；「重新分析」會明確取代現有結果。摘要包含內容重點、重要日期、費用、家長待辦及需確認事項，不顯示附件檔名或頁碼引用。處理進度、部分完成、錯誤重試及未提供欄目都會清楚顯示。
-
-目前只測試及支援 **MiniMax-M3**，其他 OpenAI-compatible model 尚未測試。每次分析最多 10 個附件、40 MiB 及 20 頁；摘要保留 30 天，來源改變時會標示需要重新分析。AI 設定在整合選項中完成，卡片設定不會儲存 API key。
-
-### 私隱
-
-只有在你按下分析按鈕（或在整合中啟用新增通告自動分析）時，通告正文及支援的附件頁面才會傳送到你設定的 AI 服務。下載檔案及 API key 不會寫入卡片設定或實體狀態。請在使用前確認 AI 服務的私隱及資料保留政策。
-
 ## Card preview
 
 ![HKTE notices card layout using synthetic sample data](screenshots/card-layout.png)
@@ -63,7 +26,7 @@ With no `entities`, the card discovers all HKTE notice-content sensors. Explicit
 
 ```yaml
 type: custom:hkte-notices-card
-title: HKTE 通告
+title: HKTE Notices
 entities:
   - sensor.student_notice_content
 entity_names:
@@ -82,18 +45,20 @@ When no notice sensor is found, the card renders an installation warning naming 
 
 ## Downloads and AI
 
-Download buttons work without AI configuration. Files are fetched with your HA login and saved by the browser; HKTE URLs and session tokens are never exposed. Configure AI in the integration options, not the card: enable AI and enter a Base URL, API key and image-capable model. Press **AI 整理重點** to analyze the entire notice and PDF/JPEG/PNG attachments. This transmits private school documents to your chosen provider only when you request it.
+Download buttons work without AI configuration. Files are fetched with your HA login and saved by the browser; HKTE URLs and session tokens are never exposed. Configure AI in the integration options, not the card: enable AI and enter a Base URL, API key and image-capable model. Press **AI summary** to analyze the entire notice and PDF/JPEG/PNG attachments. This transmits private school documents to your chosen provider only when you request it.
 
-The card shows progress, safe errors, partial results and missing filenames. Traditional Chinese highlights, dates, costs, parent actions and questions are shown without attachment filenames or page-number references. Existing summaries are loaded without a new AI call, retained locally for 30 days, and marked stale after source changes. **重新分析** explicitly replaces a result. Each analysis permits 10 attachments, 40 MiB total and 20 pages; each download is limited to 20 MiB. Check summaries against original documents before acting.
+The card shows progress, safe errors, partial results and missing filenames. Traditional Chinese highlights, dates, costs, parent actions and questions are shown without attachment filenames or page-number references. Existing summaries are loaded without a new AI call, retained locally for 30 days, and marked stale after source changes. **Analyze again** explicitly replaces a result. Each analysis permits 10 attachments, 40 MiB total and 20 pages; each download is limited to 20 MiB. Check summaries against original documents before acting.
+
+The card uses the HKTE system's configured reply deadline, regardless of AI analysis status; missing system deadlines are shown as not provided. With integration v0.4.9 or later, AI summaries flag PDF discrepancies and give precedence to the system reply deadline. Event and submission dates remain separate. Analyze older summaries again to apply this rule.
 
 The card validates all five AI summary sections, bounds displayed text and source
-references, shows empty sections as **未提供 / Not provided**, and keeps an existing
+references, shows empty sections as **Not provided**, and keeps an existing
 valid summary visible when a new response is malformed. It supports MiniMax-M3 with
 the integration's schema negotiation, bounded retry, incomplete-response detection
 and optional FIFO analysis queue. OpenAI-compatible models still need image-input
 support; consistent display is not a guarantee of factual accuracy.
 
-Downloads and summaries require entity read permission. API keys, downloaded bytes and summaries are not written into card configuration or entity state. See the integration README for privacy and storage details. `show_attachments` controls both metadata and download rows; it does not exclude files from whole-notice AI analysis.
+Downloads and summaries require entity read permission. API keys, downloaded bytes and summaries are not written into card configuration or entity state. Check your AI provider's privacy and retention policy before use. See the integration README for privacy and storage details. `show_attachments` controls both metadata and download rows; it does not exclude files from whole-notice AI analysis.
 
 ## Direct HKTE signing
 
@@ -107,10 +72,11 @@ blocked and should be handled in the official HKTE app.
 Opening the form is read-only. A submission is saved locally before the HKTE
 request, and an uncertain result is never sent again automatically. Wait at
 least five minutes before using **Check result**; the check only reads the
-provider's saved reply. The signing control requires Home Assistant entity
+provider's saved reply. A confirmed reply cannot be undone or edited from the
+card. The signing control requires Home Assistant entity
 control permission and does not mark a notice read when opened.
 
-Each notice title row includes its issued date. Read notices use a green eye icon, and replied notices use a sign icon; these status icons stay aligned to the far right for quick scanning. Unread notices retain the orange `未讀` badge, a highlighted row style, and a short attention pulse (disabled when reduced motion is enabled).
+Each notice title row includes its issued date. Read notices use a green eye icon, and replied notices use a sign icon; these status icons stay aligned to the far right for quick scanning. Unread notices retain the orange **Unread** badge, a highlighted row style, and a short attention pulse (disabled when reduced motion is enabled).
 
 ## Configuration
 
