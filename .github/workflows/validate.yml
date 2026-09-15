@@ -22,6 +22,14 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - name: Verify the committed bundle matches the source
+        run: |
+          if ! git diff --quiet HEAD -- dist ||
+             [ -n "$(git ls-files --others --exclude-standard -- dist)" ]; then
+            echo "::error::dist/hkte-notices-card.js is stale. Run 'npm run build' and commit the result."
+            git status --porcelain -- dist
+            exit 1
+          fi
       - uses: hacs/action@main
         with:
           category: plugin
