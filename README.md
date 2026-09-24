@@ -13,9 +13,9 @@ Lovelace card for the [HKTE Smart School Home Assistant integration](https://git
 ![HKTE notices card showing notice titles, issue dates and status icons](screenshots/notice-list.png)
 
 The notice list shows issue dates and read and reply status. Expanding a notice
-shows its reply deadline, signing action, content and AI highlights:
+shows its reply deadline, content and AI highlights:
 
-![Expanded HKTE notice showing the reply deadline, signing action and AI highlights](screenshots/notice-expanded.png)
+![Expanded HKTE notice showing the reply deadline, content and AI highlights](screenshots/notice-expanded.png)
 
 ## HACS installation
 
