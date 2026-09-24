@@ -10,9 +10,12 @@ Lovelace card for the [HKTE Smart School Home Assistant integration](https://git
 
 ## Card preview
 
-![HKTE notices card layout using synthetic sample data](screenshots/card-layout.png)
+![HKTE notices card showing notice titles, issue dates and status icons](screenshots/notice-list.png)
 
-The preview shows the current deadline and attachment controls with synthetic sample content and no real student data.
+The notice list shows issue dates and read and reply status. Expanding a notice
+shows its reply deadline, signing action, content and AI highlights:
+
+![Expanded HKTE notice showing the reply deadline, signing action and AI highlights](screenshots/notice-expanded.png)
 
 ## HACS installation
 
@@ -69,6 +72,14 @@ sign**. The card never supplies defaults or AI-generated answers. Payment,
 uploads, unknown question types, expired notices and already-signed notices are
 blocked and should be handled in the official HKTE app.
 
+The signing dialog opens the notice's questions without submitting a reply:
+
+![HKTE signing dialog with answer choices and a Review reply button](screenshots/signing-dialog.png)
+
+Longer forms can include multiple choices and text fields:
+
+![HKTE signing form with session choices and parent contact fields](screenshots/signing-form.png)
+
 Opening the form is read-only. A submission is saved locally before the HKTE
 request, and an uncertain result is never sent again automatically. Wait at
 least five minutes before using **Check result**; the check only reads the
@@ -90,6 +101,10 @@ npm run typecheck
 npm test
 npm run build
 ```
+
+## Community
+
+[Telegram Group](https://t.me/smarthomehk)
 
 ## License
 
